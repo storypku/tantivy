@@ -101,7 +101,8 @@ impl VIntDecoder for BlockDecoder {
         compressed_data: &'a [u8],
         offset: u32,
         num_els: usize,
-    ) -> usize {
+    ) -> usize
+    {
         self.output_len = num_els;
         vint::uncompress_sorted(compressed_data, &mut self.output[..num_els], offset)
     }
@@ -118,8 +119,8 @@ pub const COMPRESSION_BLOCK_SIZE: usize = 128;
 pub mod tests {
 
     use super::*;
-    use tests;
     use test::Bencher;
+    use tests;
 
     #[test]
     fn test_encode_sorted_block() {

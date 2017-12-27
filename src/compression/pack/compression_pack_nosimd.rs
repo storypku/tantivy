@@ -1,9 +1,9 @@
-use common::bitpacker::compute_num_bits;
-use common::bitpacker::{BitPacker, BitUnpacker};
+use super::super::COMPRESSION_BLOCK_SIZE;
 use common::CountingWriter;
+use common::bitpacker::{BitPacker, BitUnpacker};
+use common::bitpacker::compute_num_bits;
 use std::cmp;
 use std::io::Write;
-use super::super::COMPRESSION_BLOCK_SIZE;
 
 const COMPRESSED_BLOCK_MAX_SIZE: usize = COMPRESSION_BLOCK_SIZE * 4 + 1;
 
@@ -70,10 +70,9 @@ impl BlockEncoder {
                     .write(vals[0] as u64, &mut counting_writer)
                     .unwrap();
             }
-            bit_packer.flush(&mut counting_writer).expect(
-                "Flushing the bitpacking \
-                 in an in RAM buffer should never fail",
-            );
+            bit_packer
+                .flush(&mut counting_writer)
+                .expect("Flushing the bitpacking in an in RAM buffer should never fail");
             // we avoid writing "closing", because we
             // do not want 7 bytes of padding here.
             counting_writer.written_bytes()
@@ -103,7 +102,8 @@ impl BlockDecoder {
         &mut self,
         compressed_data: &'a [u8],
         mut offset: u32,
-    ) -> usize {
+    ) -> usize
+    {
         let consumed_size = {
             let num_bits = compressed_data[0];
             let bit_unpacker = BitUnpacker::new(&compressed_data[1..], num_bits as usize);

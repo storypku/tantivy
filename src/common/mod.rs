@@ -6,12 +6,12 @@ mod composite_file;
 pub mod bitpacker;
 
 pub(crate) use self::composite_file::{CompositeFile, CompositeWrite};
-pub use self::serialize::BinarySerializable;
-pub use self::timer::Timing;
-pub use self::timer::TimerTree;
-pub use self::timer::OpenTimer;
-pub use self::vint::VInt;
 pub use self::counting_writer::CountingWriter;
+pub use self::serialize::BinarySerializable;
+pub use self::timer::OpenTimer;
+pub use self::timer::TimerTree;
+pub use self::timer::Timing;
+pub use self::vint::VInt;
 
 use std::io;
 
@@ -25,7 +25,7 @@ pub trait HasLen {
     /// Return length
     fn len(&self) -> usize;
 
-    /// Returns true iff empty.
+    /// Returns true if empty.
     fn is_empty(&self) -> bool {
         self.len() == 0
     }

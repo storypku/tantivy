@@ -18,9 +18,7 @@ impl RemoveLongFilter {
 }
 
 impl<TailTokenStream> RemoveLongFilterStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     fn predicate(&self, token: &Token) -> bool {
         token.text.len() < self.token_length_limit
     }
@@ -28,7 +26,8 @@ where
     fn wrap(
         token_length_limit: usize,
         tail: TailTokenStream,
-    ) -> RemoveLongFilterStream<TailTokenStream> {
+    ) -> RemoveLongFilterStream<TailTokenStream>
+    {
         RemoveLongFilterStream {
             token_length_limit,
             tail,
@@ -37,9 +36,7 @@ where
 }
 
 impl<TailTokenStream> TokenFilter<TailTokenStream> for RemoveLongFilter
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     type ResultTokenStream = RemoveLongFilterStream<TailTokenStream>;
 
     fn transform(&self, token_stream: TailTokenStream) -> Self::ResultTokenStream {
@@ -48,17 +45,13 @@ where
 }
 
 pub struct RemoveLongFilterStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     token_length_limit: usize,
     tail: TailTokenStream,
 }
 
 impl<TailTokenStream> TokenStream for RemoveLongFilterStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     fn token(&self) -> &Token {
         self.tail.token()
     }

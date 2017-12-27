@@ -11,17 +11,17 @@ pub use self::score_combiner::ScoreCombiner;
 mod tests {
 
     use super::*;
-    use postings::{DocSet, VecPostings};
-    use query::Scorer;
-    use query::OccurFilter;
-    use query::term_query::TermScorer;
-    use query::Occur;
-    use query::Query;
-    use query::TermQuery;
-    use collector::tests::TestCollector;
     use Index;
-    use schema::*;
+    use collector::tests::TestCollector;
     use fastfield::U64FastFieldReader;
+    use postings::{DocSet, VecPostings};
+    use query::Occur;
+    use query::OccurFilter;
+    use query::Query;
+    use query::Scorer;
+    use query::TermQuery;
+    use query::term_query::TermScorer;
+    use schema::*;
     use schema::IndexRecordOption;
 
     fn abs_diff(left: f32, right: f32) -> f32 {

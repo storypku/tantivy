@@ -1,9 +1,9 @@
+use DocId;
 use Result;
-use collector::Collector;
+use Score;
 use SegmentLocalId;
 use SegmentReader;
-use DocId;
-use Score;
+use collector::Collector;
 
 /// Collector that does nothing.
 /// This is used in the chain Collector and will hopefully
@@ -41,7 +41,8 @@ impl<Left: Collector, Right: Collector> Collector for ChainedCollector<Left, Rig
         &mut self,
         segment_local_id: SegmentLocalId,
         segment: &SegmentReader,
-    ) -> Result<()> {
+    ) -> Result<()>
+    {
         try!(self.left.set_segment(segment_local_id, segment));
         try!(self.right.set_segment(segment_local_id, segment));
         Ok(())

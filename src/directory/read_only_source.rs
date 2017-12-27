@@ -1,10 +1,10 @@
-use fst::raw::MmapReadOnly;
-use std::ops::Deref;
 use super::shared_vec_slice::SharedVecSlice;
 use common::HasLen;
-use std::slice;
-use std::io::{self, Read};
+use fst::raw::MmapReadOnly;
 use stable_deref_trait::StableDeref;
+use std::io::{self, Read};
+use std::ops::Deref;
+use std::slice;
 
 /// Read object that represents files in tantivy.
 ///

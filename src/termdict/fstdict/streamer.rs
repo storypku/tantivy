@@ -1,7 +1,7 @@
+use super::TermDictionaryImpl;
 use fst::{IntoStreamer, Streamer};
 use fst::map::{Stream, StreamBuilder};
 use postings::TermInfo;
-use super::TermDictionaryImpl;
 use termdict::{TermStreamer, TermStreamerBuilder};
 
 /// See [`TermStreamerBuilder`](./trait.TermStreamerBuilder.html)

@@ -6,7 +6,7 @@ use itertools::Itertools;
 ///
 /// Documents are fundamentally a collection of unordered couple `(field, value)`.
 /// In this list, one field may appear more than once.
-///
+/// 
 ///
 
 /// Documents are really just a list of couple `(field, value)`.

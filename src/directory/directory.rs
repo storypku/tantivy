@@ -1,11 +1,11 @@
-use std::marker::Send;
-use std::fmt;
-use std::path::Path;
-use directory::error::{DeleteError, OpenReadError, OpenWriteError};
 use directory::{ReadOnlySource, WritePtr};
-use std::result;
+use directory::error::{DeleteError, OpenReadError, OpenWriteError};
+use std::fmt;
 use std::io;
+use std::marker::Send;
 use std::marker::Sync;
+use std::path::Path;
+use std::result;
 
 /// Write-once read many (WORM) abstraction for where
 /// tantivy's data should be stored.
@@ -16,7 +16,7 @@ use std::marker::Sync;
 /// should be your default choice.
 /// - The [`RAMDirectory`](struct.RAMDirectory.html), which
 /// should be used mostly for tests.
-///
+/// 
 pub trait Directory: fmt::Debug + Send + Sync + 'static {
     /// Opens a virtual file for read.
     ///

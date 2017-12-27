@@ -1,14 +1,14 @@
 use atomicwrites;
 use common::make_io_err;
 use directory::Directory;
-use directory::error::{DeleteError, IOError, OpenDirectoryError, OpenReadError, OpenWriteError};
 use directory::ReadOnlySource;
-use directory::shared_vec_slice::SharedVecSlice;
 use directory::WritePtr;
+use directory::error::{DeleteError, IOError, OpenDirectoryError, OpenReadError, OpenWriteError};
+use directory::shared_vec_slice::SharedVecSlice;
 use fst::raw::MmapReadOnly;
 use memmap::{Mmap, Protection};
-use std::collections::hash_map::Entry as HashMapEntry;
 use std::collections::HashMap;
+use std::collections::hash_map::Entry as HashMapEntry;
 use std::convert::From;
 use std::fmt;
 use std::fs::{self, File};
@@ -275,8 +275,7 @@ impl Directory for MmapDirectory {
 
         let mut mmap_cache = self.mmap_cache.write().map_err(|_| {
             let msg = format!(
-                "Failed to acquired write lock \
-                 on mmap cache while reading {:?}",
+                "Failed to acquired write lock on mmap cache while reading {:?}",
                 path
             );
             IOError::with_path(path.to_owned(), make_io_err(msg))
@@ -324,8 +323,7 @@ impl Directory for MmapDirectory {
         let full_path = self.resolve_path(path);
         let mut mmap_cache = self.mmap_cache.write().map_err(|_| {
             let msg = format!(
-                "Failed to acquired write lock \
-                 on mmap cache while deleting {:?}",
+                "Failed to acquired write lock on mmap cache while deleting {:?}",
                 path
             );
             IOError::with_path(path.to_owned(), make_io_err(msg))

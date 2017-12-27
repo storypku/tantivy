@@ -1,16 +1,16 @@
+use super::SegmentComponent;
 use Result;
-use std::path::PathBuf;
+use core::Index;
+use core::SegmentId;
+use core::SegmentMeta;
+use directory::{FileProtection, ReadOnlySource, WritePtr};
+use directory::Directory;
+use directory::error::{OpenReadError, OpenWriteError};
+use indexer::segment_serializer::SegmentSerializer;
 use schema::Schema;
 use std::fmt;
-use core::SegmentId;
-use directory::{FileProtection, ReadOnlySource, WritePtr};
-use indexer::segment_serializer::SegmentSerializer;
-use super::SegmentComponent;
-use core::Index;
+use std::path::PathBuf;
 use std::result;
-use directory::Directory;
-use core::SegmentMeta;
-use directory::error::{OpenReadError, OpenWriteError};
 
 /// A segment is a piece of the index.
 #[derive(Clone)]
@@ -80,7 +80,8 @@ impl Segment {
     pub fn open_read(
         &self,
         component: SegmentComponent,
-    ) -> result::Result<ReadOnlySource, OpenReadError> {
+    ) -> result::Result<ReadOnlySource, OpenReadError>
+    {
         let path = self.relative_path(component);
         let source = self.index.directory().open_read(&path)?;
         Ok(source)
@@ -90,7 +91,8 @@ impl Segment {
     pub fn open_write(
         &mut self,
         component: SegmentComponent,
-    ) -> result::Result<WritePtr, OpenWriteError> {
+    ) -> result::Result<WritePtr, OpenWriteError>
+    {
         let path = self.relative_path(component);
         let write = self.index.directory_mut().open_write(&path)?;
         Ok(write)
@@ -109,11 +111,11 @@ pub trait SerializableSegment {
 #[cfg(test)]
 mod tests {
 
+    use Index;
     use core::SegmentComponent;
     use directory::Directory;
-    use std::collections::HashSet;
     use schema::SchemaBuilder;
-    use Index;
+    use std::collections::HashSet;
 
     #[test]
     fn test_segment_protect_component() {

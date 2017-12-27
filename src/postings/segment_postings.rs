@@ -1,11 +1,11 @@
-use compression::{BlockDecoder, CompressedIntStream, VIntDecoder, COMPRESSION_BLOCK_SIZE};
 use DocId;
-use postings::{DocSet, HasLen, Postings, SkipResult};
-use std::cmp;
-use fst::Streamer;
-use fastfield::DeleteBitSet;
-use std::cell::UnsafeCell;
+use compression::{BlockDecoder, CompressedIntStream, VIntDecoder, COMPRESSION_BLOCK_SIZE};
 use directory::{ReadOnlySource, SourceRead};
+use fastfield::DeleteBitSet;
+use fst::Streamer;
+use postings::{DocSet, HasLen, Postings, SkipResult};
+use std::cell::UnsafeCell;
+use std::cmp;
 
 const EMPTY_POSITIONS: [u32; 0] = [0u32; 0];
 
@@ -78,7 +78,8 @@ impl SegmentPostings {
         segment_block_postings: BlockSegmentPostings,
         delete_bitset: DeleteBitSet,
         positions_stream_opt: Option<CompressedIntStream>,
-    ) -> SegmentPostings {
+    ) -> SegmentPostings
+    {
         let position_computer =
             positions_stream_opt.map(|stream| UnsafeCell::new(PositionComputer::new(stream)));
         SegmentPostings {
@@ -152,7 +153,7 @@ impl DocSet for SegmentPostings {
                 // so that position_add_skip will decide if it should
                 // just set itself to Some(0) or effectively
                 // add the term freq.
-                //let num_skips: u32 = ;
+                // let num_skips: u32 = ;
                 self.position_add_skip(|| {
                     let freqs_skipped = &self.block_cursor.freqs()[self.cur..];
                     let sum_freq: u32 = freqs_skipped.iter().cloned().sum();
@@ -298,7 +299,8 @@ impl BlockSegmentPostings {
         doc_freq: usize,
         data: SourceRead,
         has_freq: bool,
-    ) -> BlockSegmentPostings {
+    ) -> BlockSegmentPostings
+    {
         let num_bitpacked_blocks: usize = (doc_freq as usize) / COMPRESSION_BLOCK_SIZE;
         let num_vint_docs = (doc_freq as usize) - COMPRESSION_BLOCK_SIZE * num_bitpacked_blocks;
         BlockSegmentPostings {
@@ -446,16 +448,16 @@ impl<'b> Streamer<'b> for BlockSegmentPostings {
 #[cfg(test)]
 mod tests {
 
-    use DocSet;
-    use super::SegmentPostings;
-    use schema::SchemaBuilder;
-    use core::Index;
-    use schema::INT_INDEXED;
-    use schema::Term;
-    use fst::Streamer;
-    use schema::IndexRecordOption;
-    use common::HasLen;
     use super::BlockSegmentPostings;
+    use super::SegmentPostings;
+    use DocSet;
+    use common::HasLen;
+    use core::Index;
+    use fst::Streamer;
+    use schema::INT_INDEXED;
+    use schema::IndexRecordOption;
+    use schema::SchemaBuilder;
+    use schema::Term;
 
     #[test]
     fn test_empty_segment_postings() {

@@ -1,8 +1,8 @@
-use std::io::Write;
-use common::BinarySerializable;
-use std::marker::PhantomData;
 use DocId;
+use common::BinarySerializable;
 use std::io;
+use std::io::Write;
+use std::marker::PhantomData;
 
 struct LayerBuilder<T: BinarySerializable> {
     period: usize,

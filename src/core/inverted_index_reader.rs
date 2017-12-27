@@ -1,13 +1,13 @@
+use compression::CompressedIntStream;
 use directory::{ReadOnlySource, SourceRead};
-use termdict::{TermDictionary, TermDictionaryImpl};
+use fastfield::DeleteBitSet;
 use postings::{BlockSegmentPostings, SegmentPostings};
 use postings::TermInfo;
 use schema::IndexRecordOption;
+use schema::Schema;
 use schema::Term;
 use std::cmp;
-use fastfield::DeleteBitSet;
-use schema::Schema;
-use compression::CompressedIntStream;
+use termdict::{TermDictionary, TermDictionaryImpl};
 
 /// The inverted index reader is in charge of accessing
 /// the inverted index associated to a specific field.
@@ -37,7 +37,8 @@ impl InvertedIndexReader {
         positions_source: ReadOnlySource,
         delete_bitset: DeleteBitSet,
         schema: Schema,
-    ) -> InvertedIndexReader {
+    ) -> InvertedIndexReader
+    {
         InvertedIndexReader {
             termdict: TermDictionaryImpl::from_source(termdict_source),
             postings_source,
@@ -71,7 +72,8 @@ impl InvertedIndexReader {
         &self,
         term_info: &TermInfo,
         block_postings: &mut BlockSegmentPostings,
-    ) {
+    )
+    {
         let offset = term_info.postings_offset as usize;
         let end_source = self.postings_source.len();
         let postings_slice = self.postings_source.slice(offset, end_source);
@@ -87,7 +89,8 @@ impl InvertedIndexReader {
         &self,
         term_info: &TermInfo,
         option: IndexRecordOption,
-    ) -> BlockSegmentPostings {
+    ) -> BlockSegmentPostings
+    {
         let offset = term_info.postings_offset as usize;
         let postings_data = self.postings_source.slice_from(offset);
         let has_freq = option.has_freq();
@@ -106,7 +109,8 @@ impl InvertedIndexReader {
         &self,
         term_info: &TermInfo,
         option: IndexRecordOption,
-    ) -> SegmentPostings {
+    ) -> SegmentPostings
+    {
         let block_postings = self.read_block_postings_from_terminfo(term_info, option);
         let delete_bitset = self.delete_bitset.clone();
         let position_stream = {

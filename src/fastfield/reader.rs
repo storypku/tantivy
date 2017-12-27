@@ -1,16 +1,16 @@
-use directory::ReadOnlySource;
-use common::{self, BinarySerializable};
-use common::bitpacker::{compute_num_bits, BitUnpacker};
 use DocId;
-use schema::SchemaBuilder;
-use std::path::Path;
-use schema::FAST;
-use directory::{Directory, RAMDirectory, WritePtr};
-use fastfield::{FastFieldSerializer, FastFieldsWriter};
-use schema::FieldType;
-use std::mem;
+use common::{self, BinarySerializable};
 use common::CompositeFile;
+use common::bitpacker::{compute_num_bits, BitUnpacker};
+use directory::{Directory, RAMDirectory, WritePtr};
+use directory::ReadOnlySource;
+use fastfield::{FastFieldSerializer, FastFieldsWriter};
 use owning_ref::OwningRef;
+use schema::FAST;
+use schema::FieldType;
+use schema::SchemaBuilder;
+use std::mem;
+use std::path::Path;
 
 /// Trait for accessing a fastfield.
 ///
@@ -188,8 +188,6 @@ impl I64FastFieldReader {
 impl FastFieldReader for I64FastFieldReader {
     type ValueType = i64;
 
-    ///
-    ///
     /// # Panics
     ///
     /// May panic or return wrong random result if `doc`
@@ -198,7 +196,6 @@ impl FastFieldReader for I64FastFieldReader {
         common::u64_to_i64(self.underlying.get(doc))
     }
 
-    ///
     /// # Panics
     ///
     /// May panic or return wrong random result if `doc`

@@ -1,6 +1,6 @@
-/*!
-Query
-*/
+//!
+// Query
+// 
 
 mod query;
 mod boolean_query;
@@ -13,12 +13,12 @@ mod query_parser;
 mod phrase_query;
 
 pub use self::boolean_query::BooleanQuery;
-pub use self::occur_filter::OccurFilter;
 pub use self::occur::Occur;
+pub use self::occur_filter::OccurFilter;
 pub use self::phrase_query::PhraseQuery;
-pub use self::query_parser::QueryParserError;
-pub use self::query_parser::QueryParser;
 pub use self::query::Query;
+pub use self::query_parser::QueryParser;
+pub use self::query_parser::QueryParserError;
 pub use self::scorer::EmptyScorer;
 pub use self::scorer::Scorer;
 pub use self::term_query::TermQuery;

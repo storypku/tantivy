@@ -1,8 +1,8 @@
 use schema::{IntOptions, TextOptions};
 
-use serde_json::Value as JsonValue;
-use schema::Value;
 use schema::IndexRecordOption;
+use schema::Value;
+use serde_json::Value as JsonValue;
 
 /// Possible error that may occur while parsing a field value
 /// At this point the JSON is known to be valid.

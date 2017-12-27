@@ -1,16 +1,17 @@
 #![allow(should_implement_trait)]
 
-use std::cmp::max;
 use super::TermDictionaryImpl;
-use termdict::{TermStreamer, TermStreamerBuilder};
-use postings::TermInfo;
 use super::delta_encoder::{TermDeltaDecoder, TermInfoDeltaDecoder};
+use postings::TermInfo;
+use std::cmp::max;
+use termdict::{TermStreamer, TermStreamerBuilder};
 
 fn stream_before<'a>(
     term_dictionary: &'a TermDictionaryImpl,
     target_key: &[u8],
     has_positions: bool,
-) -> TermStreamerImpl<'a> {
+) -> TermStreamerImpl<'a>
+{
     let (prev_key, checkpoint) = term_dictionary.strictly_previous_key(target_key.as_ref());
     let stream_data: &'a [u8] = &term_dictionary.stream_data()[checkpoint.stream_offset as usize..];
     TermStreamerImpl {
@@ -120,7 +121,8 @@ impl<'a> TermStreamerBuilder for TermStreamerBuilderImpl<'a> {
 fn get_offset<'a, P: Fn(&[u8]) -> bool>(
     predicate: P,
     mut streamer: TermStreamerImpl<'a>,
-) -> (usize, Vec<u8>, TermInfo) {
+) -> (usize, Vec<u8>, TermInfo)
+{
     let mut prev: &[u8] = streamer.cursor;
 
     let mut term_info = streamer.value().clone();

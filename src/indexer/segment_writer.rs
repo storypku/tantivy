@@ -1,21 +1,21 @@
-use Result;
+use super::operation::AddOperation;
 use DocId;
-use std::io;
-use schema::Schema;
-use schema::Term;
+use Result;
 use core::Segment;
 use core::SerializableSegment;
-use fastfield::FastFieldsWriter;
-use schema::Field;
-use schema::FieldValue;
-use schema::FieldType;
-use indexer::segment_serializer::SegmentSerializer;
 use datastruct::stacker::Heap;
+use fastfield::FastFieldsWriter;
 use indexer::index_writer::MARGIN_IN_BYTES;
-use super::operation::AddOperation;
+use indexer::segment_serializer::SegmentSerializer;
 use postings::MultiFieldPostingsWriter;
-use tokenizer::BoxedTokenizer;
+use schema::Field;
+use schema::FieldType;
+use schema::FieldValue;
+use schema::Schema;
+use schema::Term;
 use schema::Value;
+use std::io;
+use tokenizer::BoxedTokenizer;
 
 /// A `SegmentWriter` is in charge of creating segment index from a
 /// documents.
@@ -59,7 +59,8 @@ impl<'a> SegmentWriter<'a> {
         table_bits: usize,
         mut segment: Segment,
         schema: &Schema,
-    ) -> Result<SegmentWriter<'a>> {
+    ) -> Result<SegmentWriter<'a>>
+    {
         let segment_serializer = SegmentSerializer::for_segment(&mut segment)?;
         let multifield_postings = MultiFieldPostingsWriter::new(schema, table_bits, heap);
         let tokenizers = schema
@@ -127,7 +128,8 @@ impl<'a> SegmentWriter<'a> {
         &mut self,
         add_operation: &AddOperation,
         schema: &Schema,
-    ) -> io::Result<()> {
+    ) -> io::Result<()>
+    {
         let doc_id = self.max_doc;
         let doc = &add_operation.document;
         self.doc_opstamps.push(add_operation.opstamp);
@@ -222,7 +224,8 @@ fn write(
     fast_field_writers: &FastFieldsWriter,
     fieldnorms_writer: &FastFieldsWriter,
     mut serializer: SegmentSerializer,
-) -> Result<()> {
+) -> Result<()>
+{
     multifield_postings.serialize(serializer.get_postings_serializer())?;
     fast_field_writers.serialize(serializer.get_fast_field_serializer())?;
     fieldnorms_writer.serialize(serializer.get_fieldnorms_serializer())?;

@@ -1,10 +1,10 @@
-use schema::Term;
-use query::Query;
-use core::searcher::Searcher;
 use super::PhraseWeight;
-use std::any::Any;
-use query::Weight;
 use Result;
+use core::searcher::Searcher;
+use query::Query;
+use query::Weight;
+use schema::Term;
+use std::any::Any;
 
 /// `PhraseQuery` matches a specific sequence of words.
 ///
@@ -19,7 +19,7 @@ use Result;
 ///
 /// Using a `PhraseQuery` on a field requires positions
 /// to be indexed for this field.
-///
+/// 
 #[derive(Debug)]
 pub struct PhraseQuery {
     phrase_terms: Vec<Term>,

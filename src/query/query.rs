@@ -1,11 +1,11 @@
-use Result;
-use collector::Collector;
-use core::searcher::Searcher;
-use common::TimerTree;
-use SegmentLocalId;
 use super::Weight;
-use std::fmt;
+use Result;
+use SegmentLocalId;
+use collector::Collector;
+use common::TimerTree;
+use core::searcher::Searcher;
 use std::any::Any;
+use std::fmt;
 
 /// The `Query` trait defines a set of documents and a scoring method
 /// for those documents.
@@ -58,7 +58,7 @@ pub trait Query: fmt::Debug {
     /// - setup the collector and informs it that the segment being processed has changed.
     /// - creates a `Scorer` object associated for this segment
     /// - iterate throw the matched documents and push them to the collector.
-    ///
+    /// 
     fn search(&self, searcher: &Searcher, collector: &mut Collector) -> Result<TimerTree> {
         let mut timer_tree = TimerTree::default();
         let weight = self.weight(searcher)?;

@@ -1,37 +1,37 @@
-/*!
-Compressed/slow/row-oriented storage for documents.
-
-A field needs to be marked as stored in the schema in
-order to be handled in the `Store`.
-
-Internally, documents (or rather their stored fields) are serialized to a buffer.
-When the buffer exceeds 16K, the buffer is compressed using `LZ4`
-and the resulting block is written to disk.
-
-One can then request for a specific `DocId`.
-A skip list helps navigating to the right block,
-decompresses it entirely and returns the document within it.
-
-If the last document requested was in the same block,
-the reader is smart enough to avoid decompressing
-the block a second time, but their is no real
-*uncompressed block* cache.
-
-A typical use case for the store is, once
-the search result page has been computed, returning
-the actual content of the 10 best document.
-
-# Usage
-
-Most users should not access the `StoreReader` directly
-and should rely on either
-
-- at the segment level, the
-[`SegmentReader`'s `doc` method](../struct.SegmentReader.html#method.doc)
-- at the index level, the
-[`Searcher`'s `doc` method](../struct.Searcher.html#method.doc)
-
-!*/
+//!
+// Compressed/slow/row-oriented storage for documents.
+//
+// A field needs to be marked as stored in the schema in
+// order to be handled in the `Store`.
+//
+// Internally, documents (or rather their stored fields) are serialized to a buffer.
+// When the buffer exceeds 16K, the buffer is compressed using `LZ4`
+// and the resulting block is written to disk.
+//
+// One can then request for a specific `DocId`.
+// A skip list helps navigating to the right block,
+// decompresses it entirely and returns the document within it.
+//
+// If the last document requested was in the same block,
+// the reader is smart enough to avoid decompressing
+// the block a second time, but their is no real
+// uncompressed block* cache.
+//
+// A typical use case for the store is, once
+// the search result page has been computed, returning
+// the actual content of the 10 best document.
+//
+// # Usage
+//
+// Most users should not access the `StoreReader` directly
+// and should rely on either
+//
+// - at the segment level, the
+// [`SegmentReader`'s `doc` method](../struct.SegmentReader.html#method.doc)
+// - at the index level, the
+// [`Searcher`'s `doc` method](../struct.Searcher.html#method.doc)
+//
+// !
 
 mod reader;
 mod writer;
@@ -42,12 +42,12 @@ pub use self::writer::StoreWriter;
 mod tests {
 
     use super::*;
-    use test::Bencher;
-    use std::path::Path;
-    use schema::{Schema, SchemaBuilder};
-    use schema::TextOptions;
-    use schema::FieldValue;
     use directory::{Directory, MmapDirectory, RAMDirectory, WritePtr};
+    use schema::{Schema, SchemaBuilder};
+    use schema::FieldValue;
+    use schema::TextOptions;
+    use std::path::Path;
+    use test::Bencher;
 
     fn write_lorem_ipsum_store(writer: WritePtr, num_docs: usize) -> Schema {
         let mut schema_builder = SchemaBuilder::default();
@@ -56,14 +56,12 @@ mod tests {
             schema_builder.add_text_field("title", TextOptions::default().set_stored());
         let schema = schema_builder.build();
         let lorem = String::from(
-            "Doc Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed \
-             do eiusmod tempor incididunt ut labore et dolore magna aliqua. \
-             Ut enim ad minim veniam, quis nostrud exercitation ullamco \
-             laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure \
-             dolor in reprehenderit in voluptate velit esse cillum dolore eu \
-             fugiat nulla pariatur. Excepteur sint occaecat cupidatat non \
-             proident, sunt in culpa qui officia deserunt mollit anim id est \
-             laborum.",
+            "Doc Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor \
+             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud \
+             exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute \
+             irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla \
+             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia \
+             deserunt mollit anim id est laborum.",
         );
         {
             let mut store_writer = StoreWriter::new(writer);

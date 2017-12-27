@@ -5,9 +5,7 @@ use super::{Token, TokenFilter, TokenStream};
 pub struct LowerCaser;
 
 impl<TailTokenStream> TokenFilter<TailTokenStream> for LowerCaser
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     type ResultTokenStream = LowerCaserTokenStream<TailTokenStream>;
 
     fn transform(&self, token_stream: TailTokenStream) -> Self::ResultTokenStream {
@@ -16,16 +14,12 @@ where
 }
 
 pub struct LowerCaserTokenStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     tail: TailTokenStream,
 }
 
 impl<TailTokenStream> TokenStream for LowerCaserTokenStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     fn token(&self) -> &Token {
         self.tail.token()
     }
@@ -45,9 +39,7 @@ where
 }
 
 impl<TailTokenStream> LowerCaserTokenStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     fn wrap(tail: TailTokenStream) -> LowerCaserTokenStream<TailTokenStream> {
         LowerCaserTokenStream { tail }
     }

@@ -1,11 +1,11 @@
-use Term;
-use query::Weight;
-use core::SegmentReader;
-use query::Scorer;
-use postings::SegmentPostings;
-use schema::IndexRecordOption;
 use super::term_scorer::TermScorer;
 use Result;
+use Term;
+use core::SegmentReader;
+use postings::SegmentPostings;
+use query::Scorer;
+use query::Weight;
+use schema::IndexRecordOption;
 
 pub struct TermWeight {
     pub(crate) num_docs: u32,
@@ -30,7 +30,8 @@ impl TermWeight {
     pub fn specialized_scorer(
         &self,
         reader: &SegmentReader,
-    ) -> Result<TermScorer<SegmentPostings>> {
+    ) -> Result<TermScorer<SegmentPostings>>
+    {
         let field = self.term.field();
         let inverted_index = reader.inverted_index(field);
         let fieldnorm_reader_opt = reader.get_fieldnorms_reader(field);

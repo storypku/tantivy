@@ -1,6 +1,5 @@
 /// The tokenizer module contains all of the tools used to process
 /// text in `tantivy`.
-
 use std::borrow::{Borrow, BorrowMut};
 use tokenizer::TokenStreamChain;
 
@@ -64,11 +63,9 @@ pub trait Tokenizer<'a>: Sized + Clone {
     ///     .filter(Stemmer::new());
     /// # }
     /// ```
-    ///
+    /// 
     fn filter<NewFilter>(self, new_filter: NewFilter) -> ChainTokenizer<NewFilter, Self>
-    where
-        NewFilter: TokenFilter<<Self as Tokenizer<'a>>::TokenStreamImpl>,
-    {
+    where NewFilter: TokenFilter<<Self as Tokenizer<'a>>::TokenStreamImpl> {
         ChainTokenizer {
             head: new_filter,
             tail: self,
@@ -94,13 +91,10 @@ pub trait BoxedTokenizer: Send + Sync {
 
 #[derive(Clone)]
 struct BoxableTokenizer<A>(A)
-where
-    A: for<'a> Tokenizer<'a> + Send + Sync;
+where A: for<'a> Tokenizer<'a> + Send + Sync;
 
 impl<A> BoxedTokenizer for BoxableTokenizer<A>
-where
-    A: 'static + Send + Sync + for<'a> Tokenizer<'a>,
-{
+where A: 'static + Send + Sync + for<'a> Tokenizer<'a> {
     fn token_stream<'a>(&self, text: &'a str) -> Box<TokenStream + 'a> {
         box self.0.token_stream(text)
     }
@@ -128,9 +122,7 @@ where
 }
 
 pub(crate) fn box_tokenizer<A>(a: A) -> Box<BoxedTokenizer>
-where
-    A: 'static + Send + Sync + for<'a> Tokenizer<'a>,
-{
+where A: 'static + Send + Sync + for<'a> Tokenizer<'a> {
     box BoxableTokenizer(a)
 }
 
@@ -182,7 +174,7 @@ impl<'b> TokenStream for Box<TokenStream + 'b> {
 /// }
 /// # }
 /// ```
-///
+/// 
 pub trait TokenStream {
     /// Advance to the next token
     ///
@@ -237,8 +229,7 @@ impl<'a, HeadTokenFilterFactory, TailTokenizer> Tokenizer<'a>
     for ChainTokenizer<HeadTokenFilterFactory, TailTokenizer>
 where
     HeadTokenFilterFactory: TokenFilter<TailTokenizer::TokenStreamImpl>,
-    TailTokenizer: Tokenizer<'a>,
-{
+    TailTokenizer: Tokenizer<'a>, {
     type TokenStreamImpl = HeadTokenFilterFactory::ResultTokenStream;
 
     fn token_stream(&self, text: &'a str) -> Self::TokenStreamImpl {

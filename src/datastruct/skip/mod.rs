@@ -3,8 +3,8 @@
 mod skiplist_builder;
 mod skiplist;
 
-pub use self::skiplist_builder::SkipListBuilder;
 pub use self::skiplist::SkipList;
+pub use self::skiplist_builder::SkipListBuilder;
 
 #[cfg(test)]
 mod tests {

@@ -53,7 +53,8 @@ pub(crate) fn uncompress_sorted<'a>(
     compressed_data: &'a [u8],
     output: &mut [u32],
     offset: u32,
-) -> usize {
+) -> usize
+{
     unsafe {
         streamvbyte::streamvbyte_delta_decode(
             compressed_data.as_ptr(),

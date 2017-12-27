@@ -9,13 +9,12 @@ pub(crate) struct TokenStreamChain<TTokenStream: TokenStream> {
 }
 
 impl<'a, TTokenStream> TokenStreamChain<TTokenStream>
-where
-    TTokenStream: TokenStream,
-{
+where TTokenStream: TokenStream {
     pub fn new(
         offsets: Vec<usize>,
         token_streams: Vec<TTokenStream>,
-    ) -> TokenStreamChain<TTokenStream> {
+    ) -> TokenStreamChain<TTokenStream>
+    {
         TokenStreamChain {
             offsets,
             stream_idx: 0,
@@ -27,9 +26,7 @@ where
 }
 
 impl<'a, TTokenStream> TokenStream for TokenStreamChain<TTokenStream>
-where
-    TTokenStream: TokenStream,
-{
+where TTokenStream: TokenStream {
     fn advance(&mut self) -> bool {
         while self.stream_idx < self.token_streams.len() {
             let token_stream = &mut self.token_streams[self.stream_idx];

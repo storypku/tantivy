@@ -1,24 +1,24 @@
-use Result;
-use core::Segment;
-use core::SegmentId;
-use core::SegmentComponent;
-use std::sync::RwLock;
-use common::HasLen;
-use core::SegmentMeta;
-use fastfield::{self, FastFieldNotAvailableError};
-use fastfield::DeleteBitSet;
-use store::StoreReader;
-use directory::ReadOnlySource;
-use schema::Document;
 use DocId;
-use std::sync::Arc;
-use std::collections::HashMap;
+use Result;
 use common::CompositeFile;
-use std::fmt;
+use common::HasLen;
 use core::InvertedIndexReader;
-use schema::Field;
+use core::Segment;
+use core::SegmentComponent;
+use core::SegmentId;
+use core::SegmentMeta;
+use directory::ReadOnlySource;
+use fastfield::{self, FastFieldNotAvailableError};
 use fastfield::{FastFieldReader, U64FastFieldReader};
+use fastfield::DeleteBitSet;
+use schema::Document;
+use schema::Field;
 use schema::Schema;
+use std::collections::HashMap;
+use std::fmt;
+use std::sync::Arc;
+use std::sync::RwLock;
+use store::StoreReader;
 
 /// Entry point to access all of the datastructures of the `Segment`
 ///
@@ -30,7 +30,7 @@ use schema::Schema;
 ///
 /// The segment reader has a very low memory footprint,
 /// as close to all of the memory data is mmapped.
-///
+/// 
 #[derive(Clone)]
 pub struct SegmentReader {
     inv_idx_reader_cache: Arc<RwLock<HashMap<Field, Arc<InvertedIndexReader>>>>,
@@ -86,7 +86,8 @@ impl SegmentReader {
     pub fn get_fast_field_reader<TFastFieldReader: FastFieldReader>(
         &self,
         field: Field,
-    ) -> fastfield::Result<TFastFieldReader> {
+    ) -> fastfield::Result<TFastFieldReader>
+    {
         let field_entry = self.schema.get_field_entry(field);
         if !TFastFieldReader::is_enabled(field_entry.field_type()) {
             Err(FastFieldNotAvailableError::new(field_entry))

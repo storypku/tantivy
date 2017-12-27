@@ -1,10 +1,10 @@
-use std::collections::HashSet;
 use rand::thread_rng;
+use std::collections::HashSet;
 
-use schema::*;
 use Index;
 use Searcher;
 use rand::distributions::{IndependentSample, Range};
+use schema::*;
 
 fn check_index_content(searcher: &Searcher, vals: &HashSet<u64>) {
     assert!(searcher.segment_readers().len() < 20);

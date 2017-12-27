@@ -1,7 +1,7 @@
-use common::BinarySerializable;
-use std::marker::PhantomData;
 use DocId;
+use common::BinarySerializable;
 use std::cmp::max;
+use std::marker::PhantomData;
 
 static EMPTY: [u8; 0] = [];
 

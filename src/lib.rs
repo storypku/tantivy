@@ -105,16 +105,16 @@ pub mod postings;
 pub mod schema;
 pub mod fastfield;
 
-pub use directory::Directory;
+pub use self::common::TimerTree;
 pub use core::{Index, Searcher, Segment, SegmentId, SegmentMeta};
+pub use core::{InvertedIndexReader, SegmentReader};
+pub use directory::Directory;
 pub use indexer::IndexWriter;
 pub use schema::{Document, Term};
-pub use core::{InvertedIndexReader, SegmentReader};
-pub use self::common::TimerTree;
 
+pub use core::SegmentComponent;
 pub use postings::DocSet;
 pub use postings::Postings;
-pub use core::SegmentComponent;
 
 pub use common::{i64_to_u64, u64_to_i64};
 
@@ -130,10 +130,10 @@ pub fn version() -> &'static str {
 
 /// Defines tantivy's merging strategy
 pub mod merge_policy {
-    pub use indexer::MergePolicy;
-    pub use indexer::LogMergePolicy;
-    pub use indexer::NoMergePolicy;
     pub use indexer::DefaultMergePolicy;
+    pub use indexer::LogMergePolicy;
+    pub use indexer::MergePolicy;
+    pub use indexer::NoMergePolicy;
 }
 
 /// A `u32` identifying a document within a segment.
@@ -181,17 +181,17 @@ pub struct DocAddress(pub SegmentLocalId, pub DocId);
 #[cfg(test)]
 mod tests {
 
-    use collector::tests::TestCollector;
-    use Index;
-    use core::SegmentReader;
-    use query::BooleanQuery;
-    use schema::IndexRecordOption;
-    use schema::*;
     use DocSet;
+    use Index;
     use IndexWriter;
-    use fastfield::{FastFieldReader, I64FastFieldReader, U64FastFieldReader};
     use Postings;
+    use collector::tests::TestCollector;
+    use core::SegmentReader;
+    use fastfield::{FastFieldReader, I64FastFieldReader, U64FastFieldReader};
+    use query::BooleanQuery;
     use rand::{Rng, SeedableRng, XorShiftRng};
+    use schema::*;
+    use schema::IndexRecordOption;
 
     fn generate_array_with_seed(n: usize, ratio: f32, seed_val: u32) -> Vec<u32> {
         let seed: &[u32; 4] = &[1, 2, 3, seed_val];
@@ -715,8 +715,7 @@ mod tests {
         let mut schema_builder = SchemaBuilder::default();
         let text_field = schema_builder.add_text_field("text", TEXT);
         let other_text_field = schema_builder.add_text_field("text2", TEXT);
-        let document =
-            doc!(text_field => "tantivy",
+        let document = doc!(text_field => "tantivy",
                             text_field => "some other value",
                             other_text_field => "short");
         assert_eq!(document.len(), 3);

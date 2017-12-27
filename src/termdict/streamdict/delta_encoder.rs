@@ -1,7 +1,7 @@
-use postings::TermInfo;
 use super::CheckPoint;
-use std::mem;
 use common::BinarySerializable;
+use postings::TermInfo;
+use std::mem;
 
 /// Returns the len of the longest
 /// common prefix of `s1` and `s2`.

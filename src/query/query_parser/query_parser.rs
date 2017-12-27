@@ -1,18 +1,18 @@
-use schema::{Field, Schema};
-use query::Query;
-use query::BooleanQuery;
 use super::logical_ast::*;
-use super::user_input_ast::*;
 use super::query_grammar::parse_to_ast;
+use super::user_input_ast::*;
+use core::Index;
+use query::BooleanQuery;
 use query::Occur;
-use query::TermQuery;
-use schema::IndexRecordOption;
 use query::PhraseQuery;
+use query::Query;
+use query::TermQuery;
+use schema::{Field, Schema};
 use schema::{FieldType, Term};
+use schema::IndexRecordOption;
+use std::num::ParseIntError;
 use std::str::FromStr;
 use tokenizer::TokenizerManager;
-use std::num::ParseIntError;
-use core::Index;
 
 /// Possible error that may happen when parsing a query.
 #[derive(Debug, PartialEq, Eq)]
@@ -71,7 +71,7 @@ impl From<ParseIntError> for QueryParserError {
 ///   e.g. `apple -fruit`
 ///
 /// * must terms: By prepending a term by a `+`, a term can be made required for the search.
-///
+/// 
 pub struct QueryParser {
     schema: Schema,
     default_fields: Vec<Field>,
@@ -88,7 +88,8 @@ impl QueryParser {
         schema: Schema,
         default_fields: Vec<Field>,
         tokenizer_manager: TokenizerManager,
-    ) -> QueryParser {
+    ) -> QueryParser
+    {
         QueryParser {
             schema,
             default_fields,
@@ -145,7 +146,8 @@ impl QueryParser {
     fn compute_logical_ast(
         &self,
         user_input_ast: UserInputAST,
-    ) -> Result<LogicalAST, QueryParserError> {
+    ) -> Result<LogicalAST, QueryParserError>
+    {
         let (occur, ast) = self.compute_logical_ast_with_occur(user_input_ast)?;
         if occur == Occur::MustNot {
             return Err(QueryParserError::AllButQueryForbidden);
@@ -156,7 +158,8 @@ impl QueryParser {
         &self,
         field: Field,
         phrase: &str,
-    ) -> Result<Option<LogicalLiteral>, QueryParserError> {
+    ) -> Result<Option<LogicalLiteral>, QueryParserError>
+    {
         let field_entry = self.schema.get_field_entry(field);
         let field_type = field_entry.field_type();
         if !field_type.is_indexed() {
@@ -220,7 +223,8 @@ impl QueryParser {
     fn compute_logical_ast_with_occur(
         &self,
         user_input_ast: UserInputAST,
-    ) -> Result<(Occur, LogicalAST), QueryParserError> {
+    ) -> Result<(Occur, LogicalAST), QueryParserError>
+    {
         match user_input_ast {
             UserInputAST::Clause(sub_queries) => {
                 let default_occur = self.default_occur();
@@ -320,13 +324,13 @@ fn convert_to_query(logical_ast: LogicalAST) -> Box<Query> {
 
 #[cfg(test)]
 mod test {
-    use schema::{SchemaBuilder, Term, INT_INDEXED, STORED, STRING, TEXT};
-    use tokenizer::TokenizerManager;
-    use query::Query;
-    use schema::Field;
     use super::QueryParser;
     use super::QueryParserError;
     use super::super::logical_ast::*;
+    use query::Query;
+    use schema::{SchemaBuilder, Term, INT_INDEXED, STORED, STRING, TEXT};
+    use schema::Field;
+    use tokenizer::TokenizerManager;
 
     fn make_query_parser() -> QueryParser {
         let mut schema_builder = SchemaBuilder::default();
@@ -347,7 +351,8 @@ mod test {
     fn parse_query_to_logical_ast(
         query: &str,
         default_conjunction: bool,
-    ) -> Result<LogicalAST, QueryParserError> {
+    ) -> Result<LogicalAST, QueryParserError>
+    {
         let mut query_parser = make_query_parser();
         if default_conjunction {
             query_parser.set_conjunction_by_default();
@@ -359,7 +364,8 @@ mod test {
         query: &str,
         expected: &str,
         default_conjunction: bool,
-    ) {
+    )
+    {
         let query = parse_query_to_logical_ast(query, default_conjunction).unwrap();
         let query_str = format!("{:?}", query);
         assert_eq!(query_str, expected);
@@ -373,7 +379,7 @@ mod test {
 
     #[test]
     pub fn test_parse_nonindexed_field_yields_error() {
-        let  query_parser = make_query_parser();
+        let query_parser = make_query_parser();
 
         let is_not_indexed_err = |query: &str| {
             let result: Result<Box<Query>, QueryParserError> = query_parser.parse_query(query);
@@ -402,8 +408,8 @@ mod test {
     pub fn test_parse_query_untokenized() {
         test_parse_query_to_logical_ast_helper(
             "nottokenized:\"wordone wordtwo\"",
-            "Term([0, 0, 0, 7, 119, 111, 114, 100, 111, 110, \
-             101, 32, 119, 111, 114, 100, 116, 119, 111])",
+            "Term([0, 0, 0, 7, 119, 111, 114, 100, 111, 110, 101, 32, 119, 111, 114, 100, 116, \
+             119, 111])",
             false,
         );
     }
@@ -460,8 +466,7 @@ mod test {
         );
         test_parse_query_to_logical_ast_helper(
             "+title:toto -titi",
-            "(+Term([0, 0, 0, 0, 116, 111, 116, 111]) \
-             -(Term([0, 0, 0, 0, 116, 105, 116, 105]) \
+            "(+Term([0, 0, 0, 0, 116, 111, 116, 111]) -(Term([0, 0, 0, 0, 116, 105, 116, 105]) \
              Term([0, 0, 0, 1, 116, 105, 116, 105])))",
             false,
         );
@@ -473,14 +478,12 @@ mod test {
         );
         test_parse_query_to_logical_ast_helper(
             "title:a b",
-            "(Term([0, 0, 0, 0, 97]) (Term([0, 0, 0, 0, 98]) \
-             Term([0, 0, 0, 1, 98])))",
+            "(Term([0, 0, 0, 0, 97]) (Term([0, 0, 0, 0, 98]) Term([0, 0, 0, 1, 98])))",
             false,
         );
         test_parse_query_to_logical_ast_helper(
             "title:\"a b\"",
-            "\"[Term([0, 0, 0, 0, 97]), \
-             Term([0, 0, 0, 0, 98])]\"",
+            "\"[Term([0, 0, 0, 0, 97]), Term([0, 0, 0, 0, 98])]\"",
             false,
         );
     }
@@ -499,8 +502,7 @@ mod test {
         );
         test_parse_query_to_logical_ast_helper(
             "+title:toto -titi",
-            "(+Term([0, 0, 0, 0, 116, 111, 116, 111]) \
-             -(Term([0, 0, 0, 0, 116, 105, 116, 105]) \
+            "(+Term([0, 0, 0, 0, 116, 111, 116, 111]) -(Term([0, 0, 0, 0, 116, 105, 116, 105]) \
              Term([0, 0, 0, 1, 116, 105, 116, 105])))",
             true,
         );
@@ -512,15 +514,12 @@ mod test {
         );
         test_parse_query_to_logical_ast_helper(
             "title:a b",
-            "(+Term([0, 0, 0, 0, 97]) \
-             +(Term([0, 0, 0, 0, 98]) \
-             Term([0, 0, 0, 1, 98])))",
+            "(+Term([0, 0, 0, 0, 97]) +(Term([0, 0, 0, 0, 98]) Term([0, 0, 0, 1, 98])))",
             true,
         );
         test_parse_query_to_logical_ast_helper(
             "title:\"a b\"",
-            "\"[Term([0, 0, 0, 0, 97]), \
-             Term([0, 0, 0, 0, 98])]\"",
+            "\"[Term([0, 0, 0, 0, 97]), Term([0, 0, 0, 0, 98])]\"",
             true,
         );
     }

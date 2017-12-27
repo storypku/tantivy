@@ -1,24 +1,24 @@
-use error::{ErrorKind, Result};
-use core::SegmentReader;
-use core::Segment;
 use DocId;
+use core::Segment;
+use core::SegmentReader;
 use core::SerializableSegment;
-use schema::FieldValue;
-use indexer::SegmentSerializer;
-use postings::InvertedIndexSerializer;
-use fastfield::U64FastFieldReader;
-use itertools::Itertools;
-use postings::Postings;
-use postings::DocSet;
+use error::{ErrorKind, Result};
 use fastfield::DeleteBitSet;
-use schema::{Field, Schema};
-use termdict::TermMerger;
-use fastfield::FastFieldSerializer;
 use fastfield::FastFieldReader;
-use store::StoreWriter;
-use std::cmp::{max, min};
-use termdict::TermDictionary;
+use fastfield::FastFieldSerializer;
+use fastfield::U64FastFieldReader;
+use indexer::SegmentSerializer;
+use itertools::Itertools;
+use postings::DocSet;
+use postings::InvertedIndexSerializer;
+use postings::Postings;
+use schema::{Field, Schema};
+use schema::FieldValue;
 use schema::Term;
+use std::cmp::{max, min};
+use store::StoreWriter;
+use termdict::TermDictionary;
+use termdict::TermMerger;
 use termdict::TermStreamer;
 
 pub struct IndexMerger {
@@ -31,7 +31,8 @@ fn compute_min_max_val(
     u64_reader: &U64FastFieldReader,
     max_doc: DocId,
     delete_bitset: &DeleteBitSet,
-) -> Option<(u64, u64)> {
+) -> Option<(u64, u64)>
+{
     if max_doc == 0 {
         None
     } else if !delete_bitset.has_deletes() {
@@ -52,14 +53,16 @@ fn compute_min_max_val(
 fn extract_fieldnorm_reader(
     segment_reader: &SegmentReader,
     field: Field,
-) -> Option<U64FastFieldReader> {
+) -> Option<U64FastFieldReader>
+{
     segment_reader.get_fieldnorms_reader(field)
 }
 
 fn extract_fast_field_reader(
     segment_reader: &SegmentReader,
     field: Field,
-) -> Option<U64FastFieldReader> {
+) -> Option<U64FastFieldReader>
+{
     segment_reader.get_fast_field_reader(field).ok()
 }
 
@@ -141,7 +144,8 @@ impl IndexMerger {
         fields: Vec<Field>,
         field_reader_extractor: &Fn(&SegmentReader, Field) -> Option<U64FastFieldReader>,
         fast_field_serializer: &mut FastFieldSerializer,
-    ) -> Result<()> {
+    ) -> Result<()>
+    {
         for field in fields {
             let mut u64_readers = vec![];
             let mut min_val = u64::max_value();
@@ -258,7 +262,8 @@ impl IndexMerger {
             let segment_postings_option =
                 field_entry.field_type().get_index_record_option().expect(
                     "Encountered a field that is not supposed to be
-                         indexed. Have you modified the schema?",
+                         \
+                     indexed. Have you modified the schema?",
                 );
 
             while merged_terms.advance() {
@@ -360,21 +365,21 @@ impl SerializableSegment for IndexMerger {
 
 #[cfg(test)]
 mod tests {
-    use schema;
-    use schema::Document;
-    use schema::Term;
-    use schema::TextFieldIndexing;
-    use query::TermQuery;
-    use schema::Field;
-    use core::Index;
-    use fastfield::U64FastFieldReader;
-    use Searcher;
     use DocAddress;
+    use Searcher;
     use collector::tests::FastFieldTestCollector;
     use collector::tests::TestCollector;
-    use query::BooleanQuery;
-    use schema::IndexRecordOption;
+    use core::Index;
+    use fastfield::U64FastFieldReader;
     use futures::Future;
+    use query::BooleanQuery;
+    use query::TermQuery;
+    use schema;
+    use schema::Document;
+    use schema::Field;
+    use schema::IndexRecordOption;
+    use schema::Term;
+    use schema::TextFieldIndexing;
 
     #[test]
     fn test_index_merger_no_deletes() {

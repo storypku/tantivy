@@ -1,12 +1,12 @@
-use std::io::Write;
-use common::CountingWriter;
-use std::collections::HashMap;
-use schema::Field;
-use common::VInt;
-use directory::WritePtr;
-use std::io;
-use directory::ReadOnlySource;
 use common::BinarySerializable;
+use common::CountingWriter;
+use common::VInt;
+use directory::ReadOnlySource;
+use directory::WritePtr;
+use schema::Field;
+use std::collections::HashMap;
+use std::io;
+use std::io::Write;
 
 /// A `CompositeWrite` is used to write a `CompositeFile`.
 pub struct CompositeWrite<W = WritePtr> {
@@ -133,12 +133,12 @@ impl CompositeFile {
 #[cfg(test)]
 mod test {
 
-    use std::io::Write;
     use super::{CompositeFile, CompositeWrite};
+    use common::BinarySerializable;
+    use common::VInt;
     use directory::{Directory, RAMDirectory};
     use schema::Field;
-    use common::VInt;
-    use common::BinarySerializable;
+    use std::io::Write;
     use std::path::Path;
 
     #[test]

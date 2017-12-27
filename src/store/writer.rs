@@ -1,11 +1,11 @@
-use directory::WritePtr;
 use DocId;
-use schema::FieldValue;
 use common::BinarySerializable;
-use std::io::{self, Write};
-use lz4;
-use datastruct::SkipListBuilder;
 use common::CountingWriter;
+use datastruct::SkipListBuilder;
+use directory::WritePtr;
+use lz4;
+use schema::FieldValue;
+use std::io::{self, Write};
 
 const BLOCK_SIZE: usize = 16_384;
 
@@ -16,7 +16,7 @@ const BLOCK_SIZE: usize = 16_384;
 /// as opposed to when the segment is getting finalized.
 ///
 /// The skip list index on the other hand, is build in memory.
-///
+/// 
 pub struct StoreWriter {
     doc: DocId,
     offset_index_writer: SkipListBuilder<u64>,
@@ -44,7 +44,7 @@ impl StoreWriter {
     ///
     /// The document id is implicitely the number of times
     /// this method has been called.
-    ///
+    /// 
     pub fn store<'a>(&mut self, field_values: &[&'a FieldValue]) -> io::Result<()> {
         self.intermediary_buffer.clear();
         (field_values.len() as u32).serialize(&mut self.intermediary_buffer)?;

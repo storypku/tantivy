@@ -1,12 +1,12 @@
 use super::Collector;
-use SegmentReader;
-use SegmentLocalId;
 use DocAddress;
-use Result;
-use std::collections::BinaryHeap;
-use std::cmp::Ordering;
 use DocId;
+use Result;
 use Score;
+use SegmentLocalId;
+use SegmentReader;
+use std::cmp::Ordering;
+use std::collections::BinaryHeap;
 
 // Rust heap is a max-heap and we need a min heap.
 #[derive(Clone, Copy)]

@@ -1,6 +1,6 @@
+use DocId;
 use postings::DocSet;
 use postings::SkipResult;
-use DocId;
 
 /// Creates a `DocSet` that iterator through the intersection of two `DocSet`s.
 pub struct IntersectionDocSet<TDocSet: DocSet> {

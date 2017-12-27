@@ -1,5 +1,5 @@
-use std::mem;
 use super::heap::{Heap, HeapAllocable};
+use std::mem;
 
 #[inline]
 pub fn is_power_of_2(val: u32) -> bool {

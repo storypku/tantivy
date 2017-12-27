@@ -1,27 +1,27 @@
-/*!
-Column oriented field storage for tantivy.
-
-It is the equivalent of `Lucene`'s `DocValues`.
-
-Fast fields is a column-oriented fashion storage of `tantivy`.
-
-It is designed for the fast random access of some document
-fields given a document id.
-
-`FastField` are useful when a field is required for all or most of
-the `DocSet` : for instance for scoring, grouping, filtering, or faceting.
-
-
-Fields have to be declared as `FAST` in the  schema.
-Currently only 64-bits integers (signed or unsigned) are
-supported.
-
-They are stored in a bit-packed fashion so that their
-memory usage is directly linear with the amplitude of the
-values stored.
-
-Read access performance is comparable to that of an array lookup.
-*/
+//!
+// Column oriented field storage for tantivy.
+//
+// It is the equivalent of `Lucene`'s `DocValues`.
+//
+// Fast fields is a column-oriented fashion storage of `tantivy`.
+//
+// It is designed for the fast random access of some document
+// fields given a document id.
+//
+// `FastField` are useful when a field is required for all or most of
+// the `DocSet` : for instance for scoring, grouping, filtering, or faceting.
+//
+//
+// Fields have to be declared as `FAST` in the  schema.
+// Currently only 64-bits integers (signed or unsigned) are
+// supported.
+//
+// They are stored in a bit-packed fashion so that their
+// memory usage is directly linear with the amplitude of the
+// values stored.
+//
+// Read access performance is comparable to that of an array lookup.
+// 
 
 mod reader;
 mod writer;
@@ -29,30 +29,30 @@ mod serializer;
 mod error;
 mod delete;
 
-pub use self::delete::write_delete_bitset;
 pub use self::delete::DeleteBitSet;
-pub use self::writer::{FastFieldsWriter, IntFastFieldWriter};
+pub use self::delete::write_delete_bitset;
+pub use self::error::{FastFieldNotAvailableError, Result};
 pub use self::reader::{I64FastFieldReader, U64FastFieldReader};
 pub use self::reader::FastFieldReader;
 pub use self::serializer::FastFieldSerializer;
-pub use self::error::{FastFieldNotAvailableError, Result};
+pub use self::writer::{FastFieldsWriter, IntFastFieldWriter};
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use schema::Field;
-    use std::path::Path;
+    use common::CompositeFile;
     use directory::{Directory, RAMDirectory, WritePtr};
-    use schema::Document;
-    use schema::{Schema, SchemaBuilder};
-    use schema::FAST;
-    use test::Bencher;
-    use test;
     use fastfield::FastFieldReader;
     use rand::Rng;
     use rand::SeedableRng;
-    use common::CompositeFile;
     use rand::XorShiftRng;
+    use schema::{Schema, SchemaBuilder};
+    use schema::Document;
+    use schema::FAST;
+    use schema::Field;
+    use std::path::Path;
+    use test;
+    use test::Bencher;
 
     lazy_static! {
         static ref SCHEMA: Schema = {

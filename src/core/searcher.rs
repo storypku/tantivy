@@ -1,22 +1,22 @@
+use DocAddress;
+use DocId;
 use Result;
-use core::SegmentReader;
-use schema::Document;
 use collector::Collector;
 use common::TimerTree;
-use query::Query;
-use DocId;
-use DocAddress;
-use schema::{Field, Term};
-use termdict::{TermDictionary, TermMerger};
-use std::sync::Arc;
-use std::fmt;
 use core::InvertedIndexReader;
+use core::SegmentReader;
+use query::Query;
+use schema::{Field, Term};
+use schema::Document;
+use std::fmt;
+use std::sync::Arc;
+use termdict::{TermDictionary, TermMerger};
 
 /// Holds a list of `SegmentReader`s ready for search.
 ///
 /// It guarantees that the `Segment` will not be removed before
 /// the destruction of the `Searcher`.
-///
+/// 
 pub struct Searcher {
     segment_readers: Vec<SegmentReader>,
 }

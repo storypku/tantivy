@@ -1,11 +1,11 @@
-use schema::TextOptions;
 use schema::IntOptions;
+use schema::TextOptions;
 
-use std::fmt;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use serde::ser::SerializeStruct;
-use serde::de::{self, MapAccess, Visitor};
 use schema::FieldType;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::de::{self, MapAccess, Visitor};
+use serde::ser::SerializeStruct;
+use std::fmt;
 
 /// A `FieldEntry` represents a field and its configuration.
 /// `Schema` are a collection of `FieldEntry`
@@ -85,9 +85,7 @@ impl FieldEntry {
 
 impl Serialize for FieldEntry {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
+    where S: Serializer {
         let mut s = serializer.serialize_struct("field_entry", 3)?;
         s.serialize_field("name", &self.name)?;
 
@@ -112,9 +110,7 @@ impl Serialize for FieldEntry {
 
 impl<'de> Deserialize<'de> for FieldEntry {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
+    where D: Deserializer<'de> {
         #[derive(Deserialize)]
         #[serde(field_identifier, rename_all = "lowercase")]
         enum Field {
@@ -135,9 +131,7 @@ impl<'de> Deserialize<'de> for FieldEntry {
             }
 
             fn visit_map<V>(self, mut map: V) -> Result<FieldEntry, V::Error>
-            where
-                V: MapAccess<'de>,
-            {
+            where V: MapAccess<'de> {
                 let mut name = None;
                 let mut ty = None;
                 let mut field_type = None;
@@ -157,8 +151,7 @@ impl<'de> Deserialize<'de> for FieldEntry {
                         }
                         Field::Options => match ty {
                             None => {
-                                let msg = "The `type` field must be \
-                                           specified before `options`";
+                                let msg = "The `type` field must be specified before `options`";
                                 return Err(de::Error::custom(msg));
                             }
                             Some(ty) => match ty {

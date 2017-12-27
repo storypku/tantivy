@@ -9,15 +9,14 @@ use schema::Field;
 use DocId;
 use Result;
 use Score;
-use SegmentReader;
 use SegmentLocalId;
+use SegmentReader;
 
 /// Facet collector  for i64/u64 fast field
 pub struct FacetCollector<T>
 where
     T: FastFieldReader,
-    T::ValueType: Eq + Hash,
-{
+    T::ValueType: Eq + Hash, {
     counters: HashMap<T::ValueType, u64>,
     field: Field,
     ff_reader: Option<T>,
@@ -26,8 +25,7 @@ where
 impl<T> FacetCollector<T>
 where
     T: FastFieldReader,
-    T::ValueType: Eq + Hash,
-{
+    T::ValueType: Eq + Hash, {
     /// Creates a new facet collector for aggregating a given field.
     pub fn new(field: Field) -> FacetCollector<T> {
         FacetCollector {
@@ -41,8 +39,7 @@ where
 impl<T> Collector for FacetCollector<T>
 where
     T: FastFieldReader,
-    T::ValueType: Eq + Hash,
-{
+    T::ValueType: Eq + Hash, {
     fn set_segment(&mut self, _: SegmentLocalId, reader: &SegmentReader) -> Result<()> {
         self.ff_reader = Some(reader.get_fast_field_reader(self.field)?);
         Ok(())
@@ -60,11 +57,11 @@ where
 #[cfg(test)]
 mod tests {
 
-    use collector::{chain, FacetCollector};
-    use query::QueryParser;
-    use fastfield::{I64FastFieldReader, U64FastFieldReader};
-    use schema::{self, FAST, STRING};
     use Index;
+    use collector::{chain, FacetCollector};
+    use fastfield::{I64FastFieldReader, U64FastFieldReader};
+    use query::QueryParser;
+    use schema::{self, FAST, STRING};
 
     #[test]
     // create 10 documents, set num field value to 0 or 1 for even/odd ones

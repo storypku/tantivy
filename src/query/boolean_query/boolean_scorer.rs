@@ -1,10 +1,10 @@
-use query::Scorer;
 use DocId;
-use std::collections::BinaryHeap;
-use std::cmp::Ordering;
 use postings::DocSet;
 use query::OccurFilter;
+use query::Scorer;
 use query::boolean_query::ScoreCombiner;
+use std::cmp::Ordering;
+use std::collections::BinaryHeap;
 
 /// Each `HeapItem` represents the head of
 /// one of scorer being merged.

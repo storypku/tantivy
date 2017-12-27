@@ -1,6 +1,6 @@
-/*!
-Postings module (also called inverted index)
-*/
+//!
+// Postings module (also called inverted index)
+// 
 
 /// Postings module
 ///
@@ -18,39 +18,39 @@ mod intersection;
 mod docset;
 
 pub use self::docset::{DocSet, SkipResult};
+pub(crate) use self::postings_writer::MultiFieldPostingsWriter;
 use self::recorder::{NothingRecorder, Recorder, TFAndPositionRecorder, TermFrequencyRecorder};
 pub use self::serializer::{FieldSerializer, InvertedIndexSerializer};
-pub(crate) use self::postings_writer::MultiFieldPostingsWriter;
 
-pub use self::term_info::TermInfo;
 pub use self::postings::Postings;
+pub use self::term_info::TermInfo;
 
 #[cfg(test)]
 pub use self::vec_postings::VecPostings;
 
-pub use self::segment_postings::{BlockSegmentPostings, SegmentPostings};
 pub use self::intersection::IntersectionDocSet;
+pub use self::segment_postings::{BlockSegmentPostings, SegmentPostings};
 pub use common::HasLen;
 
 #[cfg(test)]
 mod tests {
 
     use super::*;
-    use schema::{Document, SchemaBuilder, Term, INT_INDEXED, STRING, TEXT};
-    use core::SegmentComponent;
-    use indexer::SegmentWriter;
-    use core::SegmentReader;
     use core::Index;
-    use schema::IndexRecordOption;
-    use std::iter;
+    use core::SegmentComponent;
+    use core::SegmentReader;
     use datastruct::stacker::Heap;
     use fastfield::FastFieldReader;
-    use query::TermQuery;
-    use schema::Field;
-    use test::{self, Bencher};
+    use indexer::SegmentWriter;
     use indexer::operation::AddOperation;
-    use tests;
+    use query::TermQuery;
     use rand::{Rng, SeedableRng, XorShiftRng};
+    use schema::{Document, SchemaBuilder, Term, INT_INDEXED, STRING, TEXT};
+    use schema::Field;
+    use schema::IndexRecordOption;
+    use std::iter;
+    use test::{self, Bencher};
+    use tests;
 
     #[test]
     pub fn test_position_write() {

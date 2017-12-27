@@ -11,7 +11,7 @@
 /// amount of information to be decoded as one goes through a posting list.
 /// (See [`InvertedIndexReader.read_postings`](
 ///     ../struct.InvertedIndexReader.html#method.read_postings))
-///
+/// 
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Ord, Eq, Hash, Serialize, Deserialize)]
 pub enum IndexRecordOption {
     /// records only the `DocId`s

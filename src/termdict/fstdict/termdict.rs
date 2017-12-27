@@ -1,12 +1,12 @@
-use std::io::{self, Write};
+use super::{TermStreamerBuilderImpl, TermStreamerImpl};
+use common::BinarySerializable;
+use directory::ReadOnlySource;
 use fst;
 use fst::raw::Fst;
-use directory::ReadOnlySource;
-use common::BinarySerializable;
-use schema::FieldType;
 use postings::TermInfo;
+use schema::FieldType;
+use std::io::{self, Write};
 use termdict::{TermDictionary, TermDictionaryBuilder};
-use super::{TermStreamerBuilderImpl, TermStreamerImpl};
 
 fn convert_fst_error(e: fst::Error) -> io::Error {
     io::Error::new(io::ErrorKind::Other, e)
@@ -19,9 +19,7 @@ pub struct TermDictionaryBuilderImpl<W> {
 }
 
 impl<W> TermDictionaryBuilderImpl<W>
-where
-    W: Write,
-{
+where W: Write {
     /// # Warning
     /// Horribly dangerous internal API
     ///
@@ -46,9 +44,7 @@ where
 }
 
 impl<W> TermDictionaryBuilder<W> for TermDictionaryBuilderImpl<W>
-where
-    W: Write,
-{
+where W: Write {
     fn new(w: W, _field_type: FieldType) -> io::Result<Self> {
         let fst_builder = fst::MapBuilder::new(w).map_err(convert_fst_error)?;
         Ok(TermDictionaryBuilderImpl {

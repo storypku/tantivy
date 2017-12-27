@@ -1,9 +1,9 @@
-use std::sync::atomic::AtomicUsize;
-use std::sync::atomic::Ordering;
+use crossbeam::sync::MsQueue;
 use std::mem;
 use std::ops::{Deref, DerefMut};
-use crossbeam::sync::MsQueue;
 use std::sync::Arc;
+use std::sync::atomic::AtomicUsize;
+use std::sync::atomic::Ordering;
 
 pub struct GenerationItem<T> {
     generation: usize,
@@ -114,8 +114,8 @@ impl<T> Drop for LeasedItem<T> {
 #[cfg(test)]
 mod tests {
 
-    use std::iter;
     use super::Pool;
+    use std::iter;
 
     #[test]
     fn test_pool() {

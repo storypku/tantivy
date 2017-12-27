@@ -1,54 +1,54 @@
-/*!
-The term dictionary is one of the key datastructure of
-tantivy. It associates sorted `terms` to a `TermInfo` struct
-that serves as an address in their respective posting list.
+//!
+// The term dictionary is one of the key datastructure of
+// tantivy. It associates sorted `terms` to a `TermInfo` struct
+// that serves as an address in their respective posting list.
+//
+// The term dictionary API makes it possible to iterate through
+// a range of keys in a sorted manner.
+//
+// # Implementations
+//
+// There is currently two implementations of the term dictionary.
+//
+// ## Default implementation : *fstdict*
+//
+// The default one relies heavily on the `fst` crate.
+// It associate each terms `&[u8]` representation to a `u64`
+// that is in fact an address in a buffer. The value is then accessible
+// via deserializing the value at this address.
+//
+//
+// ## Stream implementation : *streamdict*
+//
+// The `fstdict` is a tiny bit slow when streaming all of
+// the terms.
+// For some use case (analytics engine), it is preferrable
+// to use the `streamdict`, that offers better streaming
+// performance, to the detriment of `lookup` performance.
+//
+// `streamdict` can be enabled by adding the `streamdict`
+// feature when compiling `tantivy`.
+//
+// `streamdict` encodes each term relatively to the precedent
+// as follows.
+//
+// - number of bytes that needs to be popped.
+// - number of bytes that needs to be added.
+// - sequence of bytes that is to be added
+// - value.
+//
+// Because such a structure does not allow for lookups,
+// it comes with a `fst` that indexes 1 out of `1024`
+// terms in this structure.
+//
+// A `lookup` therefore consists in a lookup in the `fst`
+// followed by a streaming through at most `1024` elements in the
+// term `stream`.
+// 
 
-The term dictionary API makes it possible to iterate through
-a range of keys in a sorted manner.
-
-# Implementations
-
-There is currently two implementations of the term dictionary.
-
-## Default implementation : *fstdict*
-
-The default one relies heavily on the `fst` crate.
-It associate each terms `&[u8]` representation to a `u64`
-that is in fact an address in a buffer. The value is then accessible
-via deserializing the value at this address.
-
-
-## Stream implementation : *streamdict*
-
-The `fstdict` is a tiny bit slow when streaming all of
-the terms.
-For some use case (analytics engine), it is preferrable
-to use the `streamdict`, that offers better streaming
-performance, to the detriment of `lookup` performance.
-
-`streamdict` can be enabled by adding the `streamdict`
-feature when compiling `tantivy`.
-
-`streamdict` encodes each term relatively to the precedent
-as follows.
-
-- number of bytes that needs to be popped.
-- number of bytes that needs to be added.
-- sequence of bytes that is to be added
-- value.
-
-Because such a structure does not allow for lookups,
-it comes with a `fst` that indexes 1 out of `1024`
-terms in this structure.
-
-A `lookup` therefore consists in a lookup in the `fst`
-followed by a streaming through at most `1024` elements in the
-term `stream`.
-*/
-
-use schema::{Field, FieldType, Term};
 use directory::ReadOnlySource;
 use postings::TermInfo;
+use schema::{Field, FieldType, Term};
 
 pub use self::merger::TermMerger;
 
@@ -69,9 +69,7 @@ use std::io;
 
 /// Dictionary associating sorted `&[u8]` to values
 pub trait TermDictionary<'a>
-where
-    Self: Sized,
-{
+where Self: Sized {
     /// Streamer type associated to the term dictionary
     type Streamer: TermStreamer + 'a;
 
@@ -108,9 +106,7 @@ where
 ///
 /// Inserting must be done in the order of the `keys`.
 pub trait TermDictionaryBuilder<W>: Sized
-where
-    W: io::Write,
-{
+where W: io::Write {
     /// Creates a new `TermDictionaryBuilder`
     fn new(write: W, field_type: FieldType) -> io::Result<Self>;
 
@@ -190,16 +186,16 @@ pub trait TermStreamerBuilder {
 #[cfg(test)]
 mod tests {
     use super::{TermDictionaryBuilderImpl, TermDictionaryImpl, TermStreamerImpl};
-    use directory::{Directory, RAMDirectory, ReadOnlySource};
-    use std::path::PathBuf;
-    use schema::{Document, FieldType, SchemaBuilder, Term, TEXT};
     use core::Index;
+    use directory::{Directory, RAMDirectory, ReadOnlySource};
+    use postings::TermInfo;
+    use schema::{Document, FieldType, SchemaBuilder, Term, TEXT};
+    use std::path::PathBuf;
     use std::str;
-    use termdict::TermStreamer;
-    use termdict::TermStreamerBuilder;
     use termdict::TermDictionary;
     use termdict::TermDictionaryBuilder;
-    use postings::TermInfo;
+    use termdict::TermStreamer;
+    use termdict::TermStreamerBuilder;
 
     const BLOCK_SIZE: usize = 1_500;
 

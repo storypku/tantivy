@@ -83,9 +83,9 @@ impl CompressedIntStream {
 pub mod tests {
 
     use super::CompressedIntStream;
-    use compression::compressed_block_size;
-    use compression::COMPRESSION_BLOCK_SIZE;
     use compression::BlockEncoder;
+    use compression::COMPRESSION_BLOCK_SIZE;
+    use compression::compressed_block_size;
     use directory::ReadOnlySource;
 
     fn create_stream_buffer() -> ReadOnlySource {

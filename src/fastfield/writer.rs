@@ -1,12 +1,12 @@
-use schema::{Document, Field, Schema};
-use fastfield::FastFieldSerializer;
-use std::io;
-use schema::Value;
 use DocId;
-use schema::FieldType;
 use common;
-use common::VInt;
 use common::BinarySerializable;
+use common::VInt;
+use fastfield::FastFieldSerializer;
+use schema::{Document, Field, Schema};
+use schema::FieldType;
+use schema::Value;
+use std::io;
 
 /// The fastfieldswriter regroup all of the fast field writers.
 pub struct FastFieldsWriter {

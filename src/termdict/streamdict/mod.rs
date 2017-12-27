@@ -1,17 +1,17 @@
-use std::io::{self, Read, Write};
 use common::BinarySerializable;
+use std::io::{self, Read, Write};
 
 mod termdict;
 mod streamer;
 mod delta_encoder;
 
-pub use self::delta_encoder::{TermDeltaDecoder, TermDeltaEncoder};
 pub use self::delta_encoder::{DeltaTermInfo, TermInfoDeltaDecoder, TermInfoDeltaEncoder};
+pub use self::delta_encoder::{TermDeltaDecoder, TermDeltaEncoder};
 
-pub use self::termdict::TermDictionaryImpl;
-pub use self::termdict::TermDictionaryBuilderImpl;
-pub use self::streamer::TermStreamerImpl;
 pub use self::streamer::TermStreamerBuilderImpl;
+pub use self::streamer::TermStreamerImpl;
+pub use self::termdict::TermDictionaryBuilderImpl;
+pub use self::termdict::TermDictionaryImpl;
 
 #[derive(Debug)]
 pub struct CheckPoint {

@@ -1,19 +1,19 @@
-use Result;
-use termdict::TermDictionaryBuilderImpl;
 use super::TermInfo;
+use DocId;
+use Result;
+use common::CompositeWrite;
+use common::CountingWriter;
+use compression::{BlockEncoder, COMPRESSION_BLOCK_SIZE};
+use compression::VIntEncoder;
+use core::Segment;
+use directory::WritePtr;
 use schema::Field;
 use schema::FieldEntry;
 use schema::FieldType;
 use schema::Schema;
-use directory::WritePtr;
-use compression::{BlockEncoder, COMPRESSION_BLOCK_SIZE};
-use DocId;
-use core::Segment;
 use std::io::{self, Write};
-use compression::VIntEncoder;
-use common::CountingWriter;
-use common::CompositeWrite;
 use termdict::TermDictionaryBuilder;
+use termdict::TermDictionaryBuilderImpl;
 
 /// `PostingsSerializer` is in charge of serializing
 /// postings on disk, in the
@@ -60,7 +60,8 @@ impl InvertedIndexSerializer {
         postings_write: CompositeWrite<WritePtr>,
         positions_write: CompositeWrite<WritePtr>,
         schema: Schema,
-    ) -> Result<InvertedIndexSerializer> {
+    ) -> Result<InvertedIndexSerializer>
+    {
         Ok(InvertedIndexSerializer {
             terms_write,
             postings_write,
@@ -122,7 +123,8 @@ impl<'a> FieldSerializer<'a> {
         term_dictionary_write: &'a mut CountingWriter<WritePtr>,
         postings_write: &'a mut CountingWriter<WritePtr>,
         positions_write: &'a mut CountingWriter<WritePtr>,
-    ) -> io::Result<FieldSerializer<'a>> {
+    ) -> io::Result<FieldSerializer<'a>>
+    {
         let (term_freq_enabled, position_enabled): (bool, bool) = match field_type {
             FieldType::Str(ref text_options) => {
                 if let Some(text_indexing_options) = text_options.get_indexing_options() {
@@ -197,7 +199,8 @@ impl<'a> FieldSerializer<'a> {
         doc_id: DocId,
         term_freq: u32,
         position_deltas: &[u32],
-    ) -> io::Result<()> {
+    ) -> io::Result<()>
+    {
         self.current_term_info.doc_freq += 1;
         self.postings_serializer.write_doc(doc_id, term_freq)?;
         if let Some(ref mut positions_serializer) = self.positions_serializer_opt.as_mut() {

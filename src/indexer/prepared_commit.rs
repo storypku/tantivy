@@ -1,5 +1,5 @@
-use Result;
 use super::IndexWriter;
+use Result;
 
 /// A prepared commit
 pub struct PreparedCommit<'a> {
@@ -31,10 +31,9 @@ impl<'a> PreparedCommit<'a> {
 
     pub fn commit(self) -> Result<u64> {
         info!("committing {}", self.opstamp);
-        self.index_writer.segment_updater().commit(
-            self.opstamp,
-            self.payload,
-        )?;
+        self.index_writer
+            .segment_updater()
+            .commit(self.opstamp, self.payload)?;
         Ok(self.opstamp)
     }
 }

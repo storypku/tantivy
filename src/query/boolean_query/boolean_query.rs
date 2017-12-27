@@ -1,14 +1,14 @@
-use Result;
-use std::any::Any;
 use super::boolean_weight::BooleanWeight;
-use query::Weight;
+use Result;
 use Searcher;
-use query::Query;
-use schema::Term;
-use query::TermQuery;
-use schema::IndexRecordOption;
 use query::Occur;
 use query::OccurFilter;
+use query::Query;
+use query::TermQuery;
+use query::Weight;
+use schema::IndexRecordOption;
+use schema::Term;
+use std::any::Any;
 
 /// The boolean query combines a set of queries
 ///

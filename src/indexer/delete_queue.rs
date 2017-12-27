@@ -1,7 +1,7 @@
 use super::operation::DeleteOperation;
-use std::sync::{Arc, RwLock};
 use std::mem;
 use std::ops::DerefMut;
+use std::sync::{Arc, RwLock};
 
 // The DeleteQueue is similar in conceptually to a multiple
 // consumer single producer broadcast channel.
@@ -59,7 +59,8 @@ impl DeleteQueue {
             .clone()
             .expect(
                 "Failed to unwrap last_block. This should never happen
-                as the Option<> is only here to make
+                as the \
+                 Option<> is only here to make
                 initialization possible",
             );
         let operations_len = last_block.operations.len();
@@ -90,7 +91,7 @@ impl DeleteQueue {
     // a consumer reaches the last read-only operations.
     // It then ask the delete queue if there happen to
     // be some unflushed operations.
-    //
+    // 
     fn flush(&self) -> Option<Arc<Block>> {
         let mut self_wlock = self.inner
             .write()

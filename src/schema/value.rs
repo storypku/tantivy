@@ -1,6 +1,6 @@
-use std::fmt;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::Visitor;
+use std::fmt;
 
 /// Value represents the value of a any field.
 /// It is an enum over all over all of the possible field type.
@@ -16,9 +16,7 @@ pub enum Value {
 
 impl Serialize for Value {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
+    where S: Serializer {
         match *self {
             Value::Str(ref v) => serializer.serialize_str(v),
             Value::U64(u) => serializer.serialize_u64(u),
@@ -29,9 +27,7 @@ impl Serialize for Value {
 
 impl<'de> Deserialize<'de> for Value {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
+    where D: Deserializer<'de> {
         struct ValueVisitor;
 
         impl<'de> Visitor<'de> for ValueVisitor {
@@ -122,9 +118,9 @@ impl<'a> From<&'a str> for Value {
 }
 
 mod binary_serialize {
+    use super::Value;
     use common::BinarySerializable;
     use std::io::{self, Read, Write};
-    use super::Value;
 
     const TEXT_CODE: u8 = 0;
     const U64_CODE: u8 = 1;

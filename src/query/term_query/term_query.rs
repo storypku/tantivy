@@ -1,10 +1,10 @@
-use Term;
-use Result;
 use super::term_weight::TermWeight;
+use Result;
+use Searcher;
+use Term;
 use query::Query;
 use query::Weight;
 use schema::IndexRecordOption;
-use Searcher;
 use std::any::Any;
 
 /// A Term query matches all of the documents

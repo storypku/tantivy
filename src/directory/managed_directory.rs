@@ -1,18 +1,18 @@
-use std::path::{Path, PathBuf};
-use serde_json;
-use directory::error::{DeleteError, IOError, OpenReadError, OpenWriteError};
-use directory::{ReadOnlySource, WritePtr};
-use std::result;
-use std::io;
 use Directory;
-use std::sync::{Arc, RwLock};
-use std::collections::HashSet;
-use std::sync::RwLockWriteGuard;
-use std::io::Write;
 use core::MANAGED_FILEPATH;
-use std::collections::HashMap;
-use std::fmt;
+use directory::{ReadOnlySource, WritePtr};
+use directory::error::{DeleteError, IOError, OpenReadError, OpenWriteError};
 use error::{ErrorKind, Result, ResultExt};
+use serde_json;
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::fmt;
+use std::io;
+use std::io::Write;
+use std::path::{Path, PathBuf};
+use std::result;
+use std::sync::{Arc, RwLock};
+use std::sync::RwLockWriteGuard;
 
 /// Wrapper of directories that keeps track of files created by Tantivy.
 ///
@@ -70,7 +70,8 @@ impl Drop for FileProtection {
 fn save_managed_paths(
     directory: &mut Directory,
     wlock: &RwLockWriteGuard<MetaInformation>,
-) -> io::Result<()> {
+) -> io::Result<()>
+{
     let mut w = serde_json::to_vec(&wlock.managed_paths)?;
     write!(&mut w, "\n")?;
     directory.atomic_write(&MANAGED_FILEPATH, &w[..])?;
@@ -283,8 +284,8 @@ mod tests {
 
     use super::*;
     use directory::MmapDirectory;
-    use std::path::Path;
     use std::io::Write;
+    use std::path::Path;
     use tempdir::TempDir;
 
     lazy_static! {

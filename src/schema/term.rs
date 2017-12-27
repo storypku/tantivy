@@ -1,8 +1,8 @@
 use std::fmt;
 
-use common;
-use byteorder::{BigEndian, ByteOrder};
 use super::Field;
+use byteorder::{BigEndian, ByteOrder};
+use common;
 use std::str;
 
 /// Size (in bytes) of the buffer of a int field.
@@ -13,8 +13,7 @@ const INT_TERM_LEN: usize = 4 + 8;
 /// It actually wraps a `Vec<u8>`.
 #[derive(Clone, PartialEq, PartialOrd, Ord, Eq, Hash)]
 pub struct Term<B = Vec<u8>>(B)
-where
-    B: AsRef<[u8]>;
+where B: AsRef<[u8]>;
 
 impl Term {
     /// Builds a term given a field, and a u64-value
@@ -108,9 +107,7 @@ impl Term {
 }
 
 impl<B> Term<B>
-where
-    B: AsRef<[u8]>,
-{
+where B: AsRef<[u8]> {
     /// Wraps a source of data
     pub fn wrap(data: B) -> Term<B> {
         Term(data)
@@ -166,9 +163,7 @@ where
 }
 
 impl<B> AsRef<[u8]> for Term<B>
-where
-    B: AsRef<[u8]>,
-{
+where B: AsRef<[u8]> {
     fn as_ref(&self) -> &[u8] {
         self.0.as_ref()
     }

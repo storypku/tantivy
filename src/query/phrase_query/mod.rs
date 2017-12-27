@@ -3,16 +3,16 @@ mod phrase_weight;
 mod phrase_scorer;
 
 pub use self::phrase_query::PhraseQuery;
-pub use self::phrase_weight::PhraseWeight;
 pub use self::phrase_scorer::PhraseScorer;
+pub use self::phrase_weight::PhraseWeight;
 
 #[cfg(test)]
 mod tests {
 
     use super::*;
+    use collector::tests::TestCollector;
     use core::Index;
     use schema::{SchemaBuilder, Term, TEXT};
-    use collector::tests::TestCollector;
 
     #[test]
     pub fn test_phrase_query() {

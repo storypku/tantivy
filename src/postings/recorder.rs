@@ -1,7 +1,7 @@
 use DocId;
-use std::{self, io};
-use postings::FieldSerializer;
 use datastruct::stacker::{ExpUnrolledLinkedList, Heap, HeapAllocable};
+use postings::FieldSerializer;
+use std::{self, io};
 
 const EMPTY_ARRAY: [u32; 0] = [0u32; 0];
 const POSITION_END: u32 = std::u32::MAX;
@@ -69,7 +69,8 @@ impl Recorder for NothingRecorder {
         self_addr: u32,
         serializer: &mut FieldSerializer,
         heap: &Heap,
-    ) -> io::Result<()> {
+    ) -> io::Result<()>
+    {
         for doc in self.stack.iter(self_addr, heap) {
             serializer.write_doc(doc, 0u32, &EMPTY_ARRAY)?;
         }
@@ -119,7 +120,8 @@ impl Recorder for TermFrequencyRecorder {
         self_addr: u32,
         serializer: &mut FieldSerializer,
         heap: &Heap,
-    ) -> io::Result<()> {
+    ) -> io::Result<()>
+    {
         // the last document has not been closed...
         // its term freq is self.current_tf.
         let mut doc_iter = self.stack
@@ -174,7 +176,8 @@ impl Recorder for TFAndPositionRecorder {
         self_addr: u32,
         serializer: &mut FieldSerializer,
         heap: &Heap,
-    ) -> io::Result<()> {
+    ) -> io::Result<()>
+    {
         let mut doc_positions = Vec::with_capacity(100);
         let mut positions_iter = self.stack.iter(self_addr, heap);
         while let Some(doc) = positions_iter.next() {

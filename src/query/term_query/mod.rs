@@ -3,22 +3,22 @@ mod term_weight;
 mod term_scorer;
 
 pub use self::term_query::TermQuery;
-pub use self::term_weight::TermWeight;
 pub use self::term_scorer::TermScorer;
+pub use self::term_weight::TermWeight;
 
 #[cfg(test)]
 mod tests {
 
-    use postings::{DocSet, VecPostings};
-    use query::Scorer;
-    use query::term_query::TermScorer;
-    use query::Query;
-    use fastfield::U64FastFieldReader;
-    use query::TermQuery;
     use Index;
+    use fastfield::FastFieldReader;
+    use fastfield::U64FastFieldReader;
+    use postings::{DocSet, VecPostings};
+    use query::Query;
+    use query::Scorer;
+    use query::TermQuery;
+    use query::term_query::TermScorer;
     use schema::*;
     use schema::IndexRecordOption;
-    use fastfield::FastFieldReader;
 
     fn abs_diff(left: f32, right: f32) -> f32 {
         (right - left).abs()

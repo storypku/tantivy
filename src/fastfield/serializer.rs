@@ -1,9 +1,9 @@
 use common::BinarySerializable;
+use common::CompositeWrite;
+use common::CountingWriter;
+use common::bitpacker::{compute_num_bits, BitPacker};
 use directory::WritePtr;
 use schema::Field;
-use common::bitpacker::{compute_num_bits, BitPacker};
-use common::CountingWriter;
-use common::CompositeWrite;
 use std::io::{self, Write};
 
 /// `FastFieldSerializer` is in charge of serializing
@@ -44,7 +44,8 @@ impl FastFieldSerializer {
         field: Field,
         min_value: u64,
         max_value: u64,
-    ) -> io::Result<FastSingleFieldSerializer<CountingWriter<WritePtr>>> {
+    ) -> io::Result<FastSingleFieldSerializer<CountingWriter<WritePtr>>>
+    {
         let field_write = self.composite_write.for_field(field);
         FastSingleFieldSerializer::open(field_write, min_value, max_value)
     }
@@ -68,7 +69,8 @@ impl<'a, W: Write> FastSingleFieldSerializer<'a, W> {
         write: &'a mut W,
         min_value: u64,
         max_value: u64,
-    ) -> io::Result<FastSingleFieldSerializer<'a, W>> {
+    ) -> io::Result<FastSingleFieldSerializer<'a, W>>
+    {
         min_value.serialize(write)?;
         let amplitude = max_value - min_value;
         amplitude.serialize(write)?;

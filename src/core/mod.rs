@@ -9,16 +9,16 @@ mod pool;
 mod segment_meta;
 mod inverted_index_reader;
 
+pub use self::index::Index;
+pub use self::index_meta::IndexMeta;
 pub use self::inverted_index_reader::InvertedIndexReader;
 pub use self::searcher::Searcher;
-pub use self::segment_component::SegmentComponent;
-pub use self::segment_id::SegmentId;
-pub use self::segment_reader::SegmentReader;
 pub use self::segment::Segment;
 pub use self::segment::SerializableSegment;
-pub use self::index::Index;
+pub use self::segment_component::SegmentComponent;
+pub use self::segment_id::SegmentId;
 pub use self::segment_meta::SegmentMeta;
-pub use self::index_meta::IndexMeta;
+pub use self::segment_reader::SegmentReader;
 
 use std::path::PathBuf;
 

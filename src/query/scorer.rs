@@ -1,5 +1,5 @@
-use DocSet;
 use DocId;
+use DocSet;
 use Score;
 use collector::Collector;
 use std::ops::{Deref, DerefMut};

@@ -1,12 +1,12 @@
-use query::Weight;
-use query::Scorer;
-use schema::Term;
-use schema::IndexRecordOption;
-use core::SegmentReader;
 use super::PhraseScorer;
+use Result;
+use core::SegmentReader;
 use postings::IntersectionDocSet;
 use query::EmptyScorer;
-use Result;
+use query::Scorer;
+use query::Weight;
+use schema::IndexRecordOption;
+use schema::Term;
 
 pub struct PhraseWeight {
     phrase_terms: Vec<Term>,

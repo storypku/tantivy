@@ -1,21 +1,21 @@
 #![allow(should_implement_trait)]
 
-use std::io::{self, Write};
 use super::CheckPoint;
 use fst;
+use std::io::{self, Write};
 
-use fst::raw::Fst;
-use directory::ReadOnlySource;
+use super::{DeltaTermInfo, TermDeltaEncoder, TermInfoDeltaEncoder};
+use super::{TermStreamerBuilderImpl, TermStreamerImpl};
 use common::BinarySerializable;
 use common::CountingWriter;
+use directory::ReadOnlySource;
+use fst::raw::Fst;
+use fst::raw::Node;
 use postings::TermInfo;
 use schema::FieldType;
-use super::{DeltaTermInfo, TermDeltaEncoder, TermInfoDeltaEncoder};
-use fst::raw::Node;
-use termdict::{TermDictionary, TermDictionaryBuilder, TermStreamer};
-use super::{TermStreamerBuilderImpl, TermStreamerImpl};
-use termdict::TermStreamerBuilder;
 use std::mem::transmute;
+use termdict::{TermDictionary, TermDictionaryBuilder, TermStreamer};
+use termdict::TermStreamerBuilder;
 
 const PADDING_SIZE: usize = 4;
 const INDEX_INTERVAL: usize = 1024;
@@ -56,9 +56,7 @@ fn fill_last<'a>(fst: &'a Fst, mut node: Node<'a>, buffer: &mut Vec<u8>) {
 }
 
 impl<W> TermDictionaryBuilderImpl<W>
-where
-    W: Write,
-{
+where W: Write {
     fn add_index_entry(&mut self) {
         let stream_offset = self.write.written_bytes() as u32;
         let term_info = self.term_info_encoder.term_info();
@@ -75,8 +73,8 @@ where
                 self.checkpoints.len() as u64,
             )
             .expect(
-                "Serializing fst on a Vec<u8> should never fail. \
-                 Where your terms not in order maybe?",
+                "Serializing fst on a Vec<u8> should never fail. Where your terms not in order \
+                 maybe?",
             );
         checkpoint
             .serialize(&mut self.checkpoints)
@@ -130,7 +128,8 @@ fn write_term_kv<W: Write>(
     delta_term_info: &DeltaTermInfo,
     has_positions: bool,
     write: &mut W,
-) -> io::Result<()> {
+) -> io::Result<()>
+{
     let suffix_len = suffix.len();
     let mut code = 0u8;
     let num_bytes_docfreq = num_bytes_required(delta_term_info.doc_freq);
@@ -165,9 +164,7 @@ fn write_term_kv<W: Write>(
 }
 
 impl<W> TermDictionaryBuilder<W> for TermDictionaryBuilderImpl<W>
-where
-    W: Write,
-{
+where W: Write {
     /// Creates a new `TermDictionaryBuilder`
     fn new(mut write: W, field_type: FieldType) -> io::Result<Self> {
         let has_positions = has_positions(&field_type);

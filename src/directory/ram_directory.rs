@@ -1,14 +1,14 @@
+use super::shared_vec_slice::SharedVecSlice;
+use common::make_io_err;
+use directory::{Directory, ReadOnlySource};
+use directory::WritePtr;
+use directory::error::{DeleteError, IOError, OpenReadError, OpenWriteError};
 use std::collections::HashMap;
 use std::fmt;
 use std::io::{self, BufWriter, Cursor, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
 use std::result;
 use std::sync::{Arc, RwLock};
-use common::make_io_err;
-use directory::{Directory, ReadOnlySource};
-use directory::error::{DeleteError, IOError, OpenReadError, OpenWriteError};
-use directory::WritePtr;
-use super::shared_vec_slice::SharedVecSlice;
 
 /// Writer associated with the `RAMDirectory`
 ///
@@ -19,7 +19,7 @@ use super::shared_vec_slice::SharedVecSlice;
 /// On drop, if the writer was left in a *dirty* state.
 /// That is, if flush was not called after the last call
 /// to write.
-///
+/// 
 struct VecWriter {
     path: PathBuf,
     shared_directory: InnerDirectory,
@@ -94,8 +94,7 @@ impl InnerDirectory {
             .read()
             .map_err(|_| {
                 let msg = format!(
-                    "Failed to acquire read lock for the \
-                     directory when trying to read {:?}",
+                    "Failed to acquire read lock for the directory when trying to read {:?}",
                     path
                 );
                 let io_err = make_io_err(msg);
@@ -115,8 +114,7 @@ impl InnerDirectory {
             .write()
             .map_err(|_| {
                 let msg = format!(
-                    "Failed to acquire write lock for the \
-                     directory when trying to delete {:?}",
+                    "Failed to acquire write lock for the directory when trying to delete {:?}",
                     path
                 );
                 let io_err = make_io_err(msg);
@@ -146,7 +144,7 @@ impl fmt::Debug for RAMDirectory {
 ///
 /// It is mainly meant for unit testing.
 /// Writes are only made visible upon flushing.
-///
+/// 
 #[derive(Clone)]
 pub struct RAMDirectory {
     fs: InnerDirectory,

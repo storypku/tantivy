@@ -1,8 +1,7 @@
-/*!
-
-WORM directory abstraction.
-
-*/
+//!
+// WORM directory abstraction.
+//
+// 
 mod mmap_directory;
 mod ram_directory;
 mod directory;
@@ -15,13 +14,13 @@ pub mod error;
 
 use std::io::{BufWriter, Seek, Write};
 
-pub use self::read_only_source::ReadOnlySource;
 pub use self::directory::Directory;
-pub use self::ram_directory::RAMDirectory;
 pub use self::mmap_directory::MmapDirectory;
+pub use self::ram_directory::RAMDirectory;
+pub use self::read_only_source::ReadOnlySource;
 
-pub(crate) use self::read_only_source::SourceRead;
 pub(crate) use self::managed_directory::{FileProtection, ManagedDirectory};
+pub(crate) use self::read_only_source::SourceRead;
 
 /// Synonym of Seek + Write
 pub trait SeekableWrite: Seek + Write {}
@@ -37,8 +36,8 @@ pub type WritePtr = BufWriter<Box<SeekableWrite>>;
 mod tests {
 
     use super::*;
-    use std::path::Path;
     use std::io::{Seek, SeekFrom, Write};
+    use std::path::Path;
 
     lazy_static! {
         static ref TEST_PATH: &'static Path = Path::new("some_path_for_test");

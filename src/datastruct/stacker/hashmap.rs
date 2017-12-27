@@ -1,6 +1,6 @@
+use super::heap::{BytesRef, Heap, HeapAllocable};
 use std::iter;
 use std::mem;
-use super::heap::{BytesRef, Heap, HeapAllocable};
 
 mod murmurhash2 {
 
@@ -59,9 +59,7 @@ mod murmurhash2 {
 /// Returns (the heap size in bytes, the hash table size in number of bits)
 pub(crate) fn split_memory(per_thread_memory_budget: usize) -> (usize, usize) {
     let table_size_limit: usize = per_thread_memory_budget / 3;
-    let compute_table_size = |num_bits: usize| {
-        (1 << num_bits) * mem::size_of::<KeyValue>()
-    };
+    let compute_table_size = |num_bits: usize| (1 << num_bits) * mem::size_of::<KeyValue>();
     let table_num_bits: usize = (1..)
         .into_iter()
         .take_while(|num_bits: &usize| compute_table_size(*num_bits) < table_size_limit)
@@ -102,7 +100,7 @@ impl KeyValue {
 /// The quirky API has the benefit of avoiding
 /// the computation of the hash of the key twice,
 /// or copying the key as long as there is no insert.
-///
+/// 
 pub struct HashMap<'a> {
     table: Box<[KeyValue]>,
     heap: &'a Heap,
@@ -197,11 +195,11 @@ impl<'a> HashMap<'a> {
 mod tests {
 
     use super::*;
-    use super::super::heap::{Heap, HeapAllocable};
     use super::murmurhash2::murmurhash2;
-    use test::Bencher;
-    use std::collections::HashSet;
     use super::split_memory;
+    use super::super::heap::{Heap, HeapAllocable};
+    use std::collections::HashSet;
+    use test::Bencher;
 
     struct TestValue {
         val: u32,

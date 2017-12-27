@@ -1,12 +1,12 @@
-/*!
-Defines how the documents matching a search query should be processed.
-*/
+//!
+// Defines how the documents matching a search query should be processed.
+// 
 
-use SegmentReader;
-use SegmentLocalId;
 use DocId;
-use Score;
 use Result;
+use Score;
+use SegmentLocalId;
+use SegmentReader;
 
 mod count_collector;
 pub use self::count_collector::CountCollector;
@@ -69,7 +69,8 @@ impl<'a, C: Collector> Collector for &'a mut C {
         &mut self,
         segment_local_id: SegmentLocalId,
         segment: &SegmentReader,
-    ) -> Result<()> {
+    ) -> Result<()>
+    {
         (*self).set_segment(segment_local_id, segment)
     }
     /// The query pushes the scored document to the collector via this method.
@@ -82,14 +83,14 @@ impl<'a, C: Collector> Collector for &'a mut C {
 pub mod tests {
 
     use super::*;
-    use test::Bencher;
     use DocId;
     use Score;
-    use core::SegmentReader;
     use SegmentLocalId;
-    use fastfield::U64FastFieldReader;
+    use core::SegmentReader;
     use fastfield::FastFieldReader;
+    use fastfield::U64FastFieldReader;
     use schema::Field;
+    use test::Bencher;
 
     /// Stores all of the doc ids.
     /// This collector is only used for tests.

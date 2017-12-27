@@ -1,9 +1,9 @@
-use query::Scorer;
-use DocSet;
-use postings::SegmentPostings;
-use postings::Postings;
-use postings::IntersectionDocSet;
 use DocId;
+use DocSet;
+use postings::IntersectionDocSet;
+use postings::Postings;
+use postings::SegmentPostings;
+use query::Scorer;
 
 pub struct PhraseScorer {
     pub intersection_docset: IntersectionDocSet<SegmentPostings>,

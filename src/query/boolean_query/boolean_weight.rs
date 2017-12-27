@@ -1,9 +1,9 @@
-use query::Weight;
-use core::SegmentReader;
-use query::Scorer;
 use super::BooleanScorer;
-use query::OccurFilter;
 use Result;
+use core::SegmentReader;
+use query::OccurFilter;
+use query::Scorer;
+use query::Weight;
 
 pub struct BooleanWeight {
     weights: Vec<Box<Weight>>,

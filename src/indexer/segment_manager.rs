@@ -1,14 +1,14 @@
 use super::segment_register::SegmentRegister;
-use std::sync::RwLock;
-use core::SegmentMeta;
 use core::{LOCKFILE_FILEPATH, META_FILEPATH};
 use core::SegmentId;
+use core::SegmentMeta;
 use indexer::SegmentEntry;
-use std::path::PathBuf;
-use std::collections::hash_set::HashSet;
-use std::sync::{RwLockReadGuard, RwLockWriteGuard};
-use std::fmt::{self, Debug, Formatter};
 use indexer::delete_queue::DeleteCursor;
+use std::collections::hash_set::HashSet;
+use std::fmt::{self, Debug, Formatter};
+use std::path::PathBuf;
+use std::sync::{RwLockReadGuard, RwLockWriteGuard};
+use std::sync::RwLock;
 
 #[derive(Default)]
 struct SegmentRegisters {
@@ -52,7 +52,8 @@ impl SegmentManager {
     pub fn from_segments(
         segment_metas: Vec<SegmentMeta>,
         delete_cursor: &DeleteCursor,
-    ) -> SegmentManager {
+    ) -> SegmentManager
+    {
         SegmentManager {
             registers: RwLock::new(SegmentRegisters {
                 uncommitted: SegmentRegister::default(),
@@ -145,7 +146,8 @@ impl SegmentManager {
         &self,
         before_merge_segment_ids: &[SegmentId],
         after_merge_segment_id: SegmentId,
-    ) {
+    )
+    {
         let mut registers_lock = self.write();
 
         // we mark all segments are ready for merge.
@@ -192,7 +194,8 @@ impl SegmentManager {
         &self,
         before_merge_segment_ids: &[SegmentId],
         after_merge_segment_entry: SegmentEntry,
-    ) {
+    )
+    {
         let mut registers_lock = self.write();
         registers_lock
             .writing

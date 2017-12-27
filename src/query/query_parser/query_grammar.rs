@@ -1,11 +1,9 @@
+use super::user_input_ast::*;
 use combine::*;
 use combine::char::*;
-use super::user_input_ast::*;
 
 fn literal<I>(input: I) -> ParseResult<UserInputAST, I>
-where
-    I: Stream<Item = char>,
-{
+where I: Stream<Item = char> {
     let term_val = || {
         let word = many1(satisfy(|c: char| c.is_alphanumeric()));
         let phrase = (char('"'), many1(satisfy(|c| c != '"')), char('"')).map(|(_, s, _)| s);
@@ -38,9 +36,7 @@ where
 }
 
 fn leaf<I>(input: I) -> ParseResult<UserInputAST, I>
-where
-    I: Stream<Item = char>,
-{
+where I: Stream<Item = char> {
     (char('-'), parser(literal))
         .map(|(_, expr)| UserInputAST::Not(box expr))
         .or((char('+'), parser(literal)).map(|(_, expr)| UserInputAST::Must(box expr)))
@@ -49,9 +45,7 @@ where
 }
 
 pub fn parse_to_ast<I>(input: I) -> ParseResult<UserInputAST, I>
-where
-    I: Stream<Item = char>,
-{
+where I: Stream<Item = char> {
     sep_by(parser(leaf), spaces())
         .map(|subqueries: Vec<UserInputAST>| {
             if subqueries.len() == 1 {

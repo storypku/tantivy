@@ -1,5 +1,5 @@
-use std::borrow::Borrow;
 use postings::docset::DocSet;
+use std::borrow::Borrow;
 
 /// Postings (also called inverted list)
 ///

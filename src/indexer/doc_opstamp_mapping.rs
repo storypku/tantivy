@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use DocId;
+use std::sync::Arc;
 
 // Doc to opstamp is used to identify which
 // document should be deleted.

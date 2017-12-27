@@ -3,8 +3,8 @@ use Result;
 use core::Segment;
 use core::SegmentComponent;
 use fastfield::FastFieldSerializer;
-use store::StoreWriter;
 use postings::InvertedIndexSerializer;
+use store::StoreWriter;
 
 /// Segment serializer is in charge of laying out on disk
 /// the data accumulated and sorted by the `SegmentWriter`.

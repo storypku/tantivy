@@ -1,24 +1,25 @@
 use DocId;
-use schema::Term;
-use postings::{FieldSerializer, InvertedIndexSerializer};
-use std::io;
-use postings::Recorder;
 use Result;
-use schema::{Field, Schema};
-use tokenizer::Token;
-use std::marker::PhantomData;
-use std::ops::DerefMut;
 use datastruct::stacker::{HashMap, Heap};
+use postings::{FieldSerializer, InvertedIndexSerializer};
 use postings::{NothingRecorder, TFAndPositionRecorder, TermFrequencyRecorder};
+use postings::Recorder;
+use schema::{Field, Schema};
 use schema::FieldEntry;
 use schema::FieldType;
-use tokenizer::TokenStream;
 use schema::IndexRecordOption;
+use schema::Term;
+use std::io;
+use std::marker::PhantomData;
+use std::ops::DerefMut;
+use tokenizer::Token;
+use tokenizer::TokenStream;
 
 fn posting_from_field_entry<'a>(
     field_entry: &FieldEntry,
     heap: &'a Heap,
-) -> Box<PostingsWriter + 'a> {
+) -> Box<PostingsWriter + 'a>
+{
     match *field_entry.field_type() {
         FieldType::Str(ref text_options) => text_options
             .get_indexing_options()
@@ -156,7 +157,8 @@ pub trait PostingsWriter {
         field: Field,
         token_stream: &mut TokenStream,
         heap: &Heap,
-    ) -> u32 {
+    ) -> u32
+    {
         let mut term = unsafe { Term::with_capacity(100) };
         term.set_field(field);
         let mut sink = |token: &Token| {
@@ -198,7 +200,8 @@ impl<'a, Rec: Recorder + 'static> PostingsWriter for SpecializedPostingsWriter<'
         position: u32,
         term: &Term,
         heap: &Heap,
-    ) {
+    )
+    {
         debug_assert!(term.as_slice().len() >= 4);
         let recorder: &mut Rec = term_index.get_or_create(term);
         let current_doc = recorder.current_doc();
@@ -216,7 +219,8 @@ impl<'a, Rec: Recorder + 'static> PostingsWriter for SpecializedPostingsWriter<'
         term_addrs: &[(&[u8], u32)],
         serializer: &mut FieldSerializer,
         heap: &Heap,
-    ) -> io::Result<()> {
+    ) -> io::Result<()>
+    {
         for &(term_bytes, addr) in term_addrs {
             let recorder: &mut Rec = self.heap.get_mut_ref(addr);
             serializer.new_term(term_bytes)?;

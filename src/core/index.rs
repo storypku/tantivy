@@ -1,29 +1,29 @@
-use Result;
-use error::{ErrorKind, ResultExt};
-use serde_json;
-use schema::Schema;
-use std::sync::Arc;
-use std::borrow::BorrowMut;
-use std::fmt;
-use core::SegmentId;
-use directory::{Directory, MmapDirectory, RAMDirectory};
-use indexer::index_writer::open_index_writer;
-use core::searcher::Searcher;
-use std::convert::From;
-use num_cpus;
-use super::segment::Segment;
-use core::SegmentReader;
-use super::pool::Pool;
-use core::SegmentMeta;
 use super::pool::LeasedItem;
-use std::path::Path;
-use core::IndexMeta;
-use indexer::DirectoryLock;
-use IndexWriter;
-use directory::ManagedDirectory;
-use core::META_FILEPATH;
+use super::pool::Pool;
+use super::segment::Segment;
 use super::segment::create_segment;
+use IndexWriter;
+use Result;
+use core::IndexMeta;
+use core::META_FILEPATH;
+use core::SegmentId;
+use core::SegmentMeta;
+use core::SegmentReader;
+use core::searcher::Searcher;
+use directory::{Directory, MmapDirectory, RAMDirectory};
+use directory::ManagedDirectory;
+use error::{ErrorKind, ResultExt};
+use indexer::DirectoryLock;
+use indexer::index_writer::open_index_writer;
 use indexer::segment_updater::save_new_metas;
+use num_cpus;
+use schema::Schema;
+use serde_json;
+use std::borrow::BorrowMut;
+use std::convert::From;
+use std::fmt;
+use std::path::Path;
+use std::sync::Arc;
 use tokenizer::TokenizerManager;
 
 const NUM_SEARCHERS: usize = 12;
@@ -51,8 +51,7 @@ impl Index {
         let ram_directory = RAMDirectory::create();
         // unwrap is ok here
         let directory = ManagedDirectory::new(ram_directory).expect(
-            "Creating a managed directory from a brand new RAM directory \
-             should never fail.",
+            "Creating a managed directory from a brand new RAM directory should never fail.",
         );
         Index::from_directory(directory, schema).expect("Creating a RAMDirectory should never fail")
     }
@@ -137,7 +136,8 @@ impl Index {
         &self,
         num_threads: usize,
         heap_size_in_bytes: usize,
-    ) -> Result<IndexWriter> {
+    ) -> Result<IndexWriter>
+    {
         let directory_lock = DirectoryLock::lock(self.directory().box_clone())?;
         open_index_writer(self, num_threads, heap_size_in_bytes, directory_lock)
     }

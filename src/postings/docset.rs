@@ -32,7 +32,7 @@ pub trait DocSet {
     /// WARNING: Calling skip always advances the docset.
     /// More specifically, if the docset is already positionned on the target
     /// skipping will advance to the next position and return SkipResult::Overstep.
-    ///
+    /// 
     fn skip_next(&mut self, target: DocId) -> SkipResult {
         if !self.advance() {
             return SkipResult::End;

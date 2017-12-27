@@ -1,6 +1,6 @@
-use std::sync::Arc;
 use super::{Token, TokenFilter, TokenStream};
 use rust_stemmers::{self, Algorithm};
+use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Stemmer {
@@ -16,9 +16,7 @@ impl Stemmer {
 }
 
 impl<TailTokenStream> TokenFilter<TailTokenStream> for Stemmer
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     type ResultTokenStream = StemmerTokenStream<TailTokenStream>;
 
     fn transform(&self, token_stream: TailTokenStream) -> Self::ResultTokenStream {
@@ -28,17 +26,13 @@ where
 }
 
 pub struct StemmerTokenStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     tail: TailTokenStream,
     stemmer: rust_stemmers::Stemmer,
 }
 
 impl<TailTokenStream> TokenStream for StemmerTokenStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     fn token(&self) -> &Token {
         self.tail.token()
     }
@@ -61,13 +55,12 @@ where
 }
 
 impl<TailTokenStream> StemmerTokenStream<TailTokenStream>
-where
-    TailTokenStream: TokenStream,
-{
+where TailTokenStream: TokenStream {
     fn wrap(
         stemmer: rust_stemmers::Stemmer,
         tail: TailTokenStream,
-    ) -> StemmerTokenStream<TailTokenStream> {
+    ) -> StemmerTokenStream<TailTokenStream>
+    {
         StemmerTokenStream { tail, stemmer }
     }
 }

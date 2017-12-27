@@ -1,9 +1,9 @@
 use super::Collector;
 use DocId;
-use Score;
 use Result;
-use SegmentReader;
+use Score;
 use SegmentLocalId;
+use SegmentReader;
 
 /// `CountCollector` collector only counts how many
 /// documents match the query.
@@ -39,8 +39,8 @@ impl Collector for CountCollector {
 mod tests {
 
     use super::*;
-    use test::Bencher;
     use collector::Collector;
+    use test::Bencher;
 
     #[bench]
     fn build_collector(b: &mut Bencher) {
